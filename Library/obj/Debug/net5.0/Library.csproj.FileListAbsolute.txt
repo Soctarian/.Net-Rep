@@ -1,0 +1,11 @@
+F:\.Net Camp\Project\Project\Library\obj\Debug\net5.0\Library.GeneratedMSBuildEditorConfig.editorconfig
+F:\.Net Camp\Project\Project\Library\obj\Debug\net5.0\Library.AssemblyInfoInputs.cache
+F:\.Net Camp\Project\Project\Library\obj\Debug\net5.0\Library.AssemblyInfo.cs
+F:\.Net Camp\Project\Project\Library\obj\Debug\net5.0\Library.csproj.CoreCompileInputs.cache
+F:\.Net Camp\Project\Project\Library\bin\Debug\net5.0\Library.deps.json
+F:\.Net Camp\Project\Project\Library\bin\Debug\net5.0\Library.dll
+F:\.Net Camp\Project\Project\Library\bin\Debug\net5.0\ref\Library.dll
+F:\.Net Camp\Project\Project\Library\bin\Debug\net5.0\Library.pdb
+F:\.Net Camp\Project\Project\Library\obj\Debug\net5.0\Library.dll
+F:\.Net Camp\Project\Project\Library\obj\Debug\net5.0\ref\Library.dll
+F:\.Net Camp\Project\Project\Library\obj\Debug\net5.0\Library.pdb
