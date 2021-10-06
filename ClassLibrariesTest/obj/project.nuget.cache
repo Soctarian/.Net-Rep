@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "bJbaANttb7RDjqYUJ5HTIKQS5jfIBiPjKz8+tbFMMR8NJWIbXkrNd9zp+Zrr1ERNlVGSwzDa3yA4/4/Ui72DCQ==",
+  "success": true,
+  "projectFilePath": "F:\\.Net Camp\\Project\\Project\\ClassLibrariesTest\\ClassLibrariesTest.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Nick\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Nick\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\Nick\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

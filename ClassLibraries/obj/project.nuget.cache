@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "3YHldDB6ALOJ6+E4DVHjDcyXF39KHEEWWi/8CPrtYYgl2hQHOLTRoKoQg8+JBrIf5JMpGrdnK0/BbzA07T1xWg==",
+  "success": true,
+  "projectFilePath": "F:\\.Net Camp\\Project\\Project\\ClassLibraries\\ClassLibraries.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Nick\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

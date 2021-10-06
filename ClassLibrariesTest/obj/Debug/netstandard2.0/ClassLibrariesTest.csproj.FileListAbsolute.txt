@@ -1,0 +1,9 @@
+F:\.Net Camp\Project\Project\ClassLibrariesTest\bin\Debug\netstandard2.0\ClassLibrariesTest.deps.json
+F:\.Net Camp\Project\Project\ClassLibrariesTest\bin\Debug\netstandard2.0\ClassLibrariesTest.dll
+F:\.Net Camp\Project\Project\ClassLibrariesTest\bin\Debug\netstandard2.0\ClassLibrariesTest.pdb
+F:\.Net Camp\Project\Project\ClassLibrariesTest\obj\Debug\netstandard2.0\ClassLibrariesTest.csprojAssemblyReference.cache
+F:\.Net Camp\Project\Project\ClassLibrariesTest\obj\Debug\netstandard2.0\ClassLibrariesTest.AssemblyInfoInputs.cache
+F:\.Net Camp\Project\Project\ClassLibrariesTest\obj\Debug\netstandard2.0\ClassLibrariesTest.AssemblyInfo.cs
+F:\.Net Camp\Project\Project\ClassLibrariesTest\obj\Debug\netstandard2.0\ClassLibrariesTest.csproj.CoreCompileInputs.cache
+F:\.Net Camp\Project\Project\ClassLibrariesTest\obj\Debug\netstandard2.0\ClassLibrariesTest.dll
+F:\.Net Camp\Project\Project\ClassLibrariesTest\obj\Debug\netstandard2.0\ClassLibrariesTest.pdb

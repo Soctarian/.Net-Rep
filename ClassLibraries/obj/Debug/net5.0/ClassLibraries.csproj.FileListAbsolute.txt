@@ -1,0 +1,12 @@
+F:\.Net Camp\Project\Project\ClassLibraries\bin\Debug\net5.0\ClassLibraries.deps.json
+F:\.Net Camp\Project\Project\ClassLibraries\bin\Debug\net5.0\ClassLibraries.dll
+F:\.Net Camp\Project\Project\ClassLibraries\bin\Debug\net5.0\ref\ClassLibraries.dll
+F:\.Net Camp\Project\Project\ClassLibraries\bin\Debug\net5.0\ClassLibraries.pdb
+F:\.Net Camp\Project\Project\ClassLibraries\obj\Debug\net5.0\ClassLibraries.csprojAssemblyReference.cache
+F:\.Net Camp\Project\Project\ClassLibraries\obj\Debug\net5.0\ClassLibraries.GeneratedMSBuildEditorConfig.editorconfig
+F:\.Net Camp\Project\Project\ClassLibraries\obj\Debug\net5.0\ClassLibraries.AssemblyInfoInputs.cache
+F:\.Net Camp\Project\Project\ClassLibraries\obj\Debug\net5.0\ClassLibraries.AssemblyInfo.cs
+F:\.Net Camp\Project\Project\ClassLibraries\obj\Debug\net5.0\ClassLibraries.csproj.CoreCompileInputs.cache
+F:\.Net Camp\Project\Project\ClassLibraries\obj\Debug\net5.0\ClassLibraries.dll
+F:\.Net Camp\Project\Project\ClassLibraries\obj\Debug\net5.0\ref\ClassLibraries.dll
+F:\.Net Camp\Project\Project\ClassLibraries\obj\Debug\net5.0\ClassLibraries.pdb
