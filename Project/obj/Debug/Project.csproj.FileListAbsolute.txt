@@ -1,10 +1,10 @@
 F:\.Net Camp\Project\Project\Project\bin\Debug\Project.exe.config
 F:\.Net Camp\Project\Project\Project\bin\Debug\Project.exe
 F:\.Net Camp\Project\Project\Project\bin\Debug\Project.pdb
-F:\.Net Camp\Project\Project\Project\bin\Debug\ClassLibrariesTest.dll
+F:\.Net Camp\Project\Project\Project\bin\Debug\DeserializeObjects.dll
 F:\.Net Camp\Project\Project\Project\bin\Debug\Newtonsoft.Json.dll
 F:\.Net Camp\Project\Project\Project\bin\Debug\RestSharp.dll
-F:\.Net Camp\Project\Project\Project\bin\Debug\ClassLibrariesTest.pdb
+F:\.Net Camp\Project\Project\Project\bin\Debug\DeserializeObjects.pdb
 F:\.Net Camp\Project\Project\Project\bin\Debug\Newtonsoft.Json.xml
 F:\.Net Camp\Project\Project\Project\bin\Debug\RestSharp.xml
 F:\.Net Camp\Project\Project\Project\obj\Debug\Project.csprojAssemblyReference.cache

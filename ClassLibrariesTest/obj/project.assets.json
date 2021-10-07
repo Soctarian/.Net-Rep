@@ -222,9 +222,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\.Net Camp\\Project\\Project\\ClassLibrariesTest\\ClassLibrariesTest.csproj",
-      "projectName": "ClassLibrariesTest",
-      "projectPath": "F:\\.Net Camp\\Project\\Project\\ClassLibrariesTest\\ClassLibrariesTest.csproj",
+      "projectUniqueName": "F:\\.Net Camp\\Project\\Project\\ClassLibrariesTest\\DeserializeObjects.csproj",
+      "projectName": "DeserializeObjects",
+      "projectPath": "F:\\.Net Camp\\Project\\Project\\ClassLibrariesTest\\DeserializeObjects.csproj",
       "packagesPath": "C:\\Users\\Nick\\.nuget\\packages\\",
       "outputPath": "F:\\.Net Camp\\Project\\Project\\ClassLibrariesTest\\obj\\",
       "projectStyle": "PackageReference",

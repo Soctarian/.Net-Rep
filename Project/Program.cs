@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
-using ClassLibrariesTest;
+using DeserializeObjects;
+
 
 namespace Project
 {
     class Program
     {
+
 
         static string GetMatchHistoryString(long accountId, int countMatches)
         {
@@ -38,15 +40,18 @@ namespace Project
             Console.Write("Введите количество матчей: ");
             countMatches = Convert.ToInt32(Console.ReadLine());
 
-            
+            var deserializedData = JsonConvert.DeserializeObject<GetMatchHistory.Root>(GetMatchHistoryString(accountId, countMatches));
 
-            var deserializedData = JsonConvert.DeserializeObject<Class1.Root>(GetMatchHistoryString(accountId, countMatches));
-            
+            Console.WriteLine();
             Console.Write("Id матчей: ");
-            foreach (var match in deserializedData.result.matches)
+            foreach (var match in deserializedData.result.Matches)
             {
                 Console.WriteLine(match.MatchId);
             }
+
+            HeroDictionary fillDictonary = new HeroDictionary();
+            string HeroString = fillDictonary.GetHeroString();
+            fillDictonary.FillDictionary(HeroString);
 
             Console.ReadKey();
         }

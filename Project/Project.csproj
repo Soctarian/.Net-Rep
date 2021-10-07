@@ -58,9 +58,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrariesTest\ClassLibrariesTest.csproj">
+    <ProjectReference Include="..\ClassLibrariesTest\DeserializeObjects.csproj">
       <Project>{38098ec4-4a44-4c3d-b9d6-8ad3c47cad94}</Project>
-      <Name>ClassLibrariesTest</Name>
+      <Name>DeserializeObjects</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

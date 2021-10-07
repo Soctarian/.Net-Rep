@@ -2,16 +2,21 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace ClassLibrariesTest
+namespace DeserializeObjects
 {
-    public class Class1
+    public class GetMatchHistory
     {
 
         public class Player
         {
-            public object account_id { get; set; }
-            public int player_slot { get; set; }
-            public int hero_id { get; set; }
+            [JsonProperty(PropertyName = "account_id")]
+            public object AccountId { get; set; }
+
+            [JsonProperty(PropertyName = "player_slot")]
+            public int PlayerSlot { get; set; }
+
+            [JsonProperty(PropertyName = "hero_id")]
+            public int HeroId { get; set; }
         }
 
 
@@ -33,7 +38,9 @@ namespace ClassLibrariesTest
             public int num_results { get; set; }
             public int total_results { get; set; }
             public int results_remaining { get; set; }
-            public List<Match> matches { get; set; }
+
+            [JsonProperty(PropertyName = "matches")]
+            public List<Match> Matches { get; set; }
         }
 
         public class Root
