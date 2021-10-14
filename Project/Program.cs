@@ -16,84 +16,101 @@ namespace Project
     class Program
     {
 
-        static string GetMatchHistoryString(decimal accountId, int countMatches)
+        static T GetWebResponseString<T>(Uri url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(
-             $"https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v1/?key=A80EC4AFFB0862E8476DFD2967292B79&account_id={accountId}&matches_requested={countMatches}");
-
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream stream = response.GetResponseStream();
-            StreamReader sr = new StreamReader(stream);
-            string sReadData;
-
-            return sReadData = sr.ReadToEnd();
-            //response.Close();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            {
+                using (StreamReader sr = new StreamReader(stream))
+                    return JsonConvert.DeserializeObject<T>(sr.ReadToEnd());
+            }
         }
-        static string GetMatchDetailsString(decimal MatchId)
+        static GetMatchHistory.Root GetMatchHistoryUrl(decimal accountId, int countMatches)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(
-             $"https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?match_id={MatchId}&key=A80EC4AFFB0862E8476DFD2967292B79");
-
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream stream = response.GetResponseStream();
-            StreamReader sr = new StreamReader(stream);
-            string sReadData;
-
-            return sReadData = sr.ReadToEnd();
-            //response.Close();
+            Uri url = new Uri($"https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v1/?key=A80EC4AFFB0862E8476DFD2967292B79&account_id={accountId}&matches_requested={countMatches}");
+            return GetWebResponseString<GetMatchHistory.Root>(url);
         }
+
+        static GetMatchDetails.Root GetMatchDetailsUrl(decimal MatchId)
+        {
+            Uri url = new Uri($"https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?match_id={MatchId}&key=A80EC4AFFB0862E8476DFD2967292B79");
+            return GetWebResponseString<GetMatchDetails.Root>(url);
+        }
+
+        static Dictionary<string, int> PlayerSlotDecipher(int data)
+        {
+            string threelastbites=" ";
+            Dictionary<string, int> Team_Pos = new Dictionary<string, int>();
+            string ConvertedData = Convert.ToString(data, 2).PadLeft(8, '0');
+            char[] ConvertedDataArray = ConvertedData.ToCharArray();
+
+            Team_Pos.Add("Team", ConvertedDataArray[0]-48);
+
+            for (int i = 7; i > 4; i--) threelastbites += ConvertedDataArray[i];
+            int playerpos = Convert.ToInt32(Convert.ToSByte(threelastbites));
+            Team_Pos.Add("Position", playerpos);
+            
+            return Team_Pos; 
+        }
+
+        //Винести розшифровку plater_slot в окремий метод який буде повертати структуру з усією информацією 
 
         static void Main(string[] args)
         {
-            decimal accountId;
-            int countMatches;
             Console.Write("Input profile ID: ");
-            accountId = Convert.ToDecimal(Console.ReadLine());//Convert.ToInt64(Console.ReadLine());
+            var accountId = Convert.ToDecimal(Console.ReadLine());
             Console.Write("Input number of matches: ");
-            countMatches = Convert.ToInt32(Console.ReadLine());
+            var countMatches = Convert.ToInt32(Console.ReadLine());
 
-            var deserializedData = JsonConvert.DeserializeObject<GetMatchHistory.Root>(GetMatchHistoryString(accountId, countMatches));
+            var deserializedData = GetMatchHistoryUrl(accountId, countMatches);
             List<decimal> IDs = new List<decimal>();
+
+            //Клас, що буде ліпити урли + ключ та базову частину посилання та комбінувати об'єкти в правильні урли
 
             Console.WriteLine();
             Console.Write("Matches IDs: ");
             foreach (var match in deserializedData.result.Matches)
             {
                 IDs.Add(match.MatchId);
-                Console.WriteLine(match.MatchId);
+                Console.Write(match.MatchId + " ");
             }
+
+
 
             List<GetMatchDetails.Root> deserializedList = new List<GetMatchDetails.Root>();
             string PlayerTeam;
             string ms = "";
-            bool win;
+            int WinCounts=0;
             for (int i = 0; i < countMatches; i++)
             {
-                ms = $"{i+1} match: Player team - ";
-                deserializedList.Add(JsonConvert.DeserializeObject<GetMatchDetails.Root>(GetMatchDetailsString(IDs[i])));
+                ms = $"{i + 1} match: Player team - ";
+                deserializedList.Add(GetMatchDetailsUrl(IDs[i]));
                 bool radiantWins = deserializedList[i].result.radiant_win;
                 foreach (var player in deserializedList[i].result.players)
                 {
                     if (player.account_id == accountId)
                     {
-                        //Нужно еще сконвертить player.player_slot в двоичную систему, добить до 8битного числа и считать 1 цифру. 0 - Radiant, 1 - Dire  :/
-                        switch (player.player_slot)
+                        var PlayerSlot = PlayerSlotDecipher(player.player_slot);
+                        switch (PlayerSlot["Team"])
                         {
                             case 0:
                                 ms += "Radiant";
-                                win = radiantWins ? true : false;
+                                WinCounts += radiantWins ? 1 : 0;
                                 break;
                             case 1:
                                 ms += "Dire";
-                                win = radiantWins ? false : true;
+                                WinCounts += radiantWins ? 0 : 1;
                                 break;
 
                         }
                     }
                 }
+
                 Console.WriteLine(ms);
             }
-           
+            double WinRate = Math.Round((WinCounts / (double)countMatches)*100);
+            Console.WriteLine($"Winrate for {countMatches}: {WinRate}%");
 
             //Инициализация словаря id - hero_name
             HeroDictionary fillDictonary = new HeroDictionary();

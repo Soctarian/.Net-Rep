@@ -17,7 +17,7 @@ namespace DeserializeObjects
         public class Player
         {
             public decimal account_id { get; set; }
-            public int player_slot { get; set; }
+            public int player_slot { get; set; } //129 => 8bit 1  (3)
             public int hero_id { get; set; }
             public int item_0 { get; set; }
             public int item_1 { get; set; }
