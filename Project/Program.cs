@@ -15,7 +15,7 @@ namespace Project
 {
     class Program
     {
-
+        public static double WinRate;
         static T GetWebResponseString<T>(Uri url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -54,37 +54,13 @@ namespace Project
             return Team_Pos; 
         }
 
-        //Винести розшифровку plater_slot в окремий метод який буде повертати структуру з усією информацією 
-
-        static void Main(string[] args)
+        static void InputMatchStatistic(List<decimal> IDs, Dictionary<int, string> HeroDictionary, List<GetMatchDetails.Root> deserializedList, int countMatches, decimal accountId)
         {
-            Console.Write("Input profile ID: ");
-            var accountId = Convert.ToDecimal(Console.ReadLine());
-            Console.Write("Input number of matches: ");
-            var countMatches = Convert.ToInt32(Console.ReadLine());
-
-            var deserializedData = GetMatchHistoryUrl(accountId, countMatches);
-            List<decimal> IDs = new List<decimal>();
-
-            //Клас, що буде ліпити урли + ключ та базову частину посилання та комбінувати об'єкти в правильні урли
-
-            Console.WriteLine();
-            Console.Write("Matches IDs: ");
-            foreach (var match in deserializedData.result.Matches)
-            {
-                IDs.Add(match.MatchId);
-                Console.Write(match.MatchId + " ");
-            }
-
-
-
-            List<GetMatchDetails.Root> deserializedList = new List<GetMatchDetails.Root>();
-            string PlayerTeam;
-            string ms = "";
-            int WinCounts=0;
+            string OutputResult = "";
+            int WinCounts = 0;
             for (int i = 0; i < countMatches; i++)
             {
-                ms = $"{i + 1} match: Player team - ";
+                OutputResult = $"{i + 1} match: Match ID - {IDs[i]}, Player team - ";
                 deserializedList.Add(GetMatchDetailsUrl(IDs[i]));
                 bool radiantWins = deserializedList[i].result.radiant_win;
                 foreach (var player in deserializedList[i].result.players)
@@ -95,28 +71,45 @@ namespace Project
                         switch (PlayerSlot["Team"])
                         {
                             case 0:
-                                ms += "Radiant";
+                                OutputResult += "Radiant";
                                 WinCounts += radiantWins ? 1 : 0;
                                 break;
                             case 1:
-                                ms += "Dire";
+                                OutputResult += "Dire";
                                 WinCounts += radiantWins ? 0 : 1;
                                 break;
-
                         }
+                        OutputResult += $", Hero - {HeroDictionary[player.hero_id]}, KDA = {Math.Round(((player.kills+player.assists)/(double)player.deaths),1)}, GPM - {player.gold_per_min}, EPM - {player.gold_per_min}, Hero damage - {player.hero_damage}";
                     }
                 }
 
-                Console.WriteLine(ms);
+                Console.WriteLine(OutputResult);
             }
-            double WinRate = Math.Round((WinCounts / (double)countMatches)*100);
-            Console.WriteLine($"Winrate for {countMatches}: {WinRate}%");
+            WinRate = Math.Round(((WinCounts / (double)countMatches) * 100), 5);
+            Console.WriteLine($"Winrate for {countMatches} matches: {WinRate}%");
+        }
 
-            //Инициализация словаря id - hero_name
-            HeroDictionary fillDictonary = new HeroDictionary();
-            string HeroString = fillDictonary.GetHeroString();
-            fillDictonary.FillDictionary(HeroString);
+        static void Main(string[] args)
+        {
+            Console.Write("Input profile ID: ");
+            var accountId = Convert.ToDecimal(Console.ReadLine());
+            Console.Write("Input number of matches: ");
+            var countMatches = Convert.ToInt32(Console.ReadLine());
 
+            var deserializedData = GetMatchHistoryUrl(accountId, countMatches);
+            List<decimal> IDs = new List<decimal>();
+            List<GetMatchDetails.Root> deserializedList = new List<GetMatchDetails.Root>();
+
+            //Initialization of dictionaries 
+            HeroAndItemsDictionary fillDictonary = new HeroAndItemsDictionary();
+            var HeroDictionary = fillDictonary.FillHeroDictionary(); //Dictonary with <id, name> 
+            var ItemDictionary = fillDictonary.FillItemDictionary();
+
+            //Клас, що буде ліпити урли + ключ та базову частину посилання та комбінувати об'єкти в правильні урли???
+
+            foreach (var match in deserializedData.result.Matches) IDs.Add(match.MatchId);
+
+            InputMatchStatistic(IDs, HeroDictionary, deserializedList, countMatches, accountId);
 
 
             Console.ReadKey();
