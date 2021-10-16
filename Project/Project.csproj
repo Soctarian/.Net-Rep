@@ -62,6 +62,10 @@
       <Project>{38098ec4-4a44-4c3d-b9d6-8ad3c47cad94}</Project>
       <Name>DeserializeObjects</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UserClasses\UserClasses.csproj">
+      <Project>{c6b36d6a-ff29-484e-ae8b-af087caf89c6}</Project>
+      <Name>UserClasses</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

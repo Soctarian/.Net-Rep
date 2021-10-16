@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
 using DeserializeObjects;
-
+using UserClasses;
 
 namespace Project
 {
@@ -54,7 +54,7 @@ namespace Project
             return Team_Pos; 
         }
 
-        static void InputMatchStatistic(List<decimal> IDs, Dictionary<int, string> HeroDictionary, List<GetMatchDetails.Root> deserializedList, int countMatches, decimal accountId)
+        static void InputQuickMatchStatistic(List<decimal> IDs, Dictionary<int, string> HeroDictionary, List<GetMatchDetails.Root> deserializedList, int countMatches, decimal accountId)
         {
             string OutputResult = "";
             int WinCounts = 0;
@@ -79,7 +79,7 @@ namespace Project
                                 WinCounts += radiantWins ? 0 : 1;
                                 break;
                         }
-                        OutputResult += $", Hero - {HeroDictionary[player.hero_id]}, KDA = {Math.Round(((player.kills+player.assists)/(double)player.deaths),1)}, GPM - {player.gold_per_min}, EPM - {player.gold_per_min}, Hero damage - {player.hero_damage}";
+                        OutputResult += $", Hero - {HeroDictionary[player.hero_id]}, KDA = {Math.Round(((player.kills+player.assists)/(double)player.deaths),1)}, GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}";
                     }
                 }
 
@@ -87,6 +87,11 @@ namespace Project
             }
             WinRate = Math.Round(((WinCounts / (double)countMatches) * 100), 5);
             Console.WriteLine($"Winrate for {countMatches} matches: {WinRate}%");
+        }
+
+        static void InputFullkMatchStatistic(Dictionary<int, string> HeroDictionary, List<GetMatchDetails.Root> deserializedList, decimal MatchId)
+        {
+
         }
 
         static void Main(string[] args)
@@ -109,7 +114,16 @@ namespace Project
 
             foreach (var match in deserializedData.result.Matches) IDs.Add(match.MatchId);
 
-            InputMatchStatistic(IDs, HeroDictionary, deserializedList, countMatches, accountId);
+            InputQuickMatchStatistic(IDs, HeroDictionary, deserializedList, countMatches, accountId);
+
+            Console.Write("Input Steam ID: ");
+            var SteamID = Convert.ToDecimal(Console.ReadLine());
+            GetUserInfo.DeterminatePlayerInfo(SteamID);
+
+            Console.Write($"\n Info: Login - {GetUserInfo.Login}, Status - {GetUserInfo.Status}, Last log off - {GetUserInfo.LastLogOff}");
+
+
+            
 
 
             Console.ReadKey();

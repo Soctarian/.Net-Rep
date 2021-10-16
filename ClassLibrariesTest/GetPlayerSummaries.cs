@@ -45,16 +45,16 @@ namespace DeserializeObjects
             public string loccountrycode { get; set; }
             public string locstatecode { get; set; }
         }
-
         public class Response
         {
             [JsonProperty(PropertyName = "players")]
             public List<Player> Players { get; set; }
         }
-
         public class Root
         {
             public Response response { get; set; }
         }
+
+
     }
 }
