@@ -71,7 +71,7 @@ namespace DeserializeObjects
             return GetHeroString<Root>(url);
         }
 
-        public Dictionary<int, string> FillHeroDictionary()
+        public static Dictionary<int, string> FillHeroDictionary()
         {
             var deserializedData = GetHeroData();
             Dictionary<int, string> Heroes = new Dictionary<int, string>();
@@ -79,7 +79,7 @@ namespace DeserializeObjects
             return Heroes;
         }
 
-        public Dictionary<int, string> FillItemDictionary()
+        public static Dictionary<int, string> FillItemDictionary()
         {
             var deserializedData = GetItemData();
             Dictionary<int, string> Items = new Dictionary<int, string>();
