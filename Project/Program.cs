@@ -40,18 +40,18 @@ namespace Project
 
         static Dictionary<string, int> PlayerSlotDecipher(int data)
         {
-            string threelastbites=" ";
+            string threelastbites = " ";
             Dictionary<string, int> Team_Pos = new Dictionary<string, int>();
             string ConvertedData = Convert.ToString(data, 2).PadLeft(8, '0');
             char[] ConvertedDataArray = ConvertedData.ToCharArray();
 
-            Team_Pos.Add("Team", ConvertedDataArray[0]-48);
+            Team_Pos.Add("Team", ConvertedDataArray[0] - 48);
 
             for (int i = 7; i > 4; i--) threelastbites += ConvertedDataArray[i];
             int playerpos = Convert.ToInt32(Convert.ToSByte(threelastbites));
             Team_Pos.Add("Position", playerpos);
-            
-            return Team_Pos; 
+
+            return Team_Pos;
         }
 
         static void InputQuickMatchStatistic(List<decimal> IDs, Dictionary<int, string> HeroDictionary, List<GetMatchDetails.Root> deserializedList, int countMatches, decimal accountId)
@@ -79,7 +79,7 @@ namespace Project
                                 WinCounts += radiantWins ? 0 : 1;
                                 break;
                         }
-                        OutputResult += $", Hero - {HeroDictionary[player.hero_id]}, KDA = {Math.Round(((player.kills+player.assists)/(double)player.deaths),1)}, GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}";
+                        OutputResult += $", Hero - {HeroDictionary[player.hero_id]}, KDA = {Math.Round(((player.kills + player.assists) / (double)player.deaths), 1)}, GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}";
                     }
                 }
 
@@ -89,21 +89,37 @@ namespace Project
             Console.WriteLine($"Winrate for {countMatches} matches: {WinRate}%");
         }
 
-        static void InputFullkMatchStatistic(Dictionary<int, string> HeroDictionary, List<GetMatchDetails.Root> deserializedList, decimal MatchId)
-        {
 
+        static void InputFullkMatchStatistic(Dictionary<int, string> HeroDictionary, decimal MatchId)
+        {
+            string OutputResult = "Radiant:\n";
+            var MatchObject = GetMatchDetailsUrl(MatchId);
+            List<GetMatchDetails.Player> Players = MatchObject.result.players;
+            int iter = 0;
+            //??? Wrong ID in api call
+            foreach (var player in Players)
+            {
+                var PlayerSteamID = player.account_id+76561197960265728; 
+                GetUserInfo.DeterminatePlayerInfo(PlayerSteamID);
+                if (iter == 5) OutputResult += "Dire:\n";
+                OutputResult += $"{iter}. {GetUserInfo.Login}\t{HeroDictionary[player.hero_id]}\t{player.kills} / {player.deaths} / {player.assists}\t Net Worth : {player.net_worth}\n";
+                iter++; 
+            }
+            Console.Write(OutputResult);
         }
 
         static void Main(string[] args)
         {
-            Console.Write("Input profile ID: ");
+            //Test DotaID: 268677900  Test SteamID: 76561198228943628 Test GameID: 6229091942 ...
+
+        /*    Console.Write("Input profile ID: ");
             var accountId = Convert.ToDecimal(Console.ReadLine());
             Console.Write("Input number of matches: ");
             var countMatches = Convert.ToInt32(Console.ReadLine());
 
             var deserializedData = GetMatchHistoryUrl(accountId, countMatches);
             List<decimal> IDs = new List<decimal>();
-            List<GetMatchDetails.Root> deserializedList = new List<GetMatchDetails.Root>();
+            List<GetMatchDetails.Root> deserializedList = new List<GetMatchDetails.Root>();*/
 
             //Initialization of dictionaries 
             HeroAndItemsDictionary fillDictonary = new HeroAndItemsDictionary();
@@ -112,7 +128,7 @@ namespace Project
 
             //Клас, що буде ліпити урли + ключ та базову частину посилання та комбінувати об'єкти в правильні урли???
 
-            foreach (var match in deserializedData.result.Matches) IDs.Add(match.MatchId);
+/*            foreach (var match in deserializedData.result.Matches) IDs.Add(match.MatchId);
 
             InputQuickMatchStatistic(IDs, HeroDictionary, deserializedList, countMatches, accountId);
 
@@ -121,9 +137,13 @@ namespace Project
             GetUserInfo.DeterminatePlayerInfo(SteamID);
 
             Console.Write($"\n Info: Login - {GetUserInfo.Login}, Status - {GetUserInfo.Status}, Last log off - {GetUserInfo.LastLogOff}");
+*/
+
+            Console.Write("Input Match ID: ");
+            var MatchID = Convert.ToDecimal(Console.ReadLine());
+            InputFullkMatchStatistic(HeroDictionary, MatchID);
 
 
-            
 
 
             Console.ReadKey();

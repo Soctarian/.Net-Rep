@@ -27,10 +27,13 @@ namespace UserClasses
         static public void DeterminatePlayerInfo(decimal UserSteamID)
         {
             var DeserializedObject = GetUserString<GetPlayerSummaries.Root>(UserSteamID);
-            var Player = DeserializedObject.response.Players[0];
-            Login = Player.Login;
-            Status = PlayerStatusDecipher(Player.personastate);
-            LastLogOff = Player.personastate == 0 ? UnixTimeStampToDateTime(Player.LastLogOff) : DateTime.Now;
+            var Player = DeserializedObject.response.Players;
+            foreach(var user in Player)
+            {
+                Login = user.Login;
+                Status = PlayerStatusDecipher(user.personastate);
+                LastLogOff = user.personastate == 0 ? UnixTimeStampToDateTime(user.LastLogOff) : DateTime.Now;
+            }
         }
 
         public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
