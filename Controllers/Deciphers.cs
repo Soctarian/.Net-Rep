@@ -21,6 +21,17 @@ namespace Controllers
 
             return Team_Pos;
         }
-
+        public static string PlayerStatusDecipher(int ProfileState)
+        {
+            Dictionary<int, string> PlayerStatus = new Dictionary<int, string>();
+            PlayerStatus.Add(0, "Offline");
+            PlayerStatus.Add(1, "Online");
+            PlayerStatus.Add(2, "Busy");
+            PlayerStatus.Add(3, "Away");
+            PlayerStatus.Add(4, "Snooze");
+            PlayerStatus.Add(5, "Looking for trade");
+            PlayerStatus.Add(6, "Looking for play");
+            return PlayerStatus[ProfileState];
+        }
     }
 }

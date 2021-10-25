@@ -64,6 +64,7 @@ namespace Controllers
 
         public void InputFullkMatchStatistic(decimal MatchId)
         {
+            GetUserInfo user = new GetUserInfo();
             var HeroDictionary = HeroAndItemsDictionary.FillHeroDictionary();
             string OutputResult = "Radiant:\n";
             var MatchObject = GetUrls.GetMatchDetailsUrl(MatchId);
@@ -73,11 +74,11 @@ namespace Controllers
             foreach (var player in Players)
             {
                 var PlayerSteamID = player.account_id + 76561197960265728;
-                if (player.account_id == UInt32.MaxValue) GetUserInfo.Login = "Anonymous";
-                else GetUserInfo.DeterminatePlayerInfo(PlayerSteamID);
+                if (player.account_id == UInt32.MaxValue) user.Login = "Anonymous";
+                else user.DeterminatePlayerInfo(PlayerSteamID);
 
                 if (iter == 5) OutputResult += "Dire:\n";
-                OutputResult += $"{GetUserInfo.Login,15}  -\t{HeroDictionary[player.hero_id],10}\t{player.kills} / {player.deaths} / {player.assists}\t Net Worth : {player.net_worth}\n";
+                OutputResult += $"{user.Login,15}  -\t{HeroDictionary[player.hero_id],10}\t{player.kills} / {player.deaths} / {player.assists}\t Net Worth : {player.net_worth}\n";
                 iter++;
             }
             Console.Write(OutputResult);
