@@ -6,6 +6,9 @@ namespace Controllers
 {
     public class Deciphers
     {
+
+
+
         public static Dictionary<string, int> PlayerSlotDecipher(int data)
         {
             string threelastbites = " ";
@@ -33,5 +36,8 @@ namespace Controllers
             PlayerStatus.Add(6, "Looking for play");
             return PlayerStatus[ProfileState];
         }
+        public static decimal ConvertToSteamID32(decimal SteamID64) => SteamID64 - 76561197960265728;
+        public static decimal ConvertToSteamID64(decimal SteamID32) => SteamID32 + 76561197960265728;
+
     }
 }
