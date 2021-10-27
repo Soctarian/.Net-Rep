@@ -6,6 +6,14 @@ namespace Controllers
 {
     public class Deciphers
     {
+
+        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dateTime;
+        }
+
         public static Dictionary<string, int> PlayerSlotDecipher(int data)
         {
             string threelastbites = " ";
@@ -21,6 +29,20 @@ namespace Controllers
 
             return Team_Pos;
         }
+        public static string PlayerStatusDecipher(int ProfileState)
+        {
+            Dictionary<int, string> PlayerStatus = new Dictionary<int, string>();
+            PlayerStatus.Add(0, "Offline");
+            PlayerStatus.Add(1, "Online");
+            PlayerStatus.Add(2, "Busy");
+            PlayerStatus.Add(3, "Away");
+            PlayerStatus.Add(4, "Snooze");
+            PlayerStatus.Add(5, "Looking for trade");
+            PlayerStatus.Add(6, "Looking for play");
+            return PlayerStatus[ProfileState];
+        }
+        public static decimal ConvertToSteamID32(decimal SteamID64) => SteamID64 - 76561197960265728;
+        public static decimal ConvertToSteamID64(decimal SteamID32) => SteamID32 + 76561197960265728;
 
     }
 }

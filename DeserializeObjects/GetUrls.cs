@@ -19,9 +19,15 @@ namespace DeserializeObjects
                     return JsonConvert.DeserializeObject<T>(sr.ReadToEnd());
             }
         }
-        public static GetMatchHistory.Root GetMatchHistoryUrl(decimal accountId, int countMatches)
+        public static GetMatchHistory.Root GetMatchHistoryUrl(decimal accountID, int countMatches)
         {
-            Uri url = new Uri($"https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v1/?key=A80EC4AFFB0862E8476DFD2967292B79&account_id={accountId}&matches_requested={countMatches}");
+            Uri url = new Uri($"https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v1/?key=A80EC4AFFB0862E8476DFD2967292B79&account_id={accountID}&matches_requested={countMatches}");
+            return GetWebResponseString<GetMatchHistory.Root>(url);
+        }
+
+        public static GetMatchHistory.Root GetMatchHistoryUrl(decimal accountID)
+        {
+            Uri url = new Uri($"https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v1/?key=A80EC4AFFB0862E8476DFD2967292B79&account_id={accountID}");
             return GetWebResponseString<GetMatchHistory.Root>(url);
         }
 

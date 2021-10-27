@@ -18,6 +18,7 @@ namespace UserClasses
 
     public class User
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int UniqID { get; set; }
         public long SteamID { get; set; }

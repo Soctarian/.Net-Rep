@@ -37,23 +37,11 @@ namespace Project
                 var Hero = Console.ReadLine();
                 output.InputDetailMatchStatistic(MatchID, Hero);*/
 
+            //db testing
+            //AddUser.AttachUser(76561198430945445);
 
-            //test bd connections (witn sql studio)
-            using (UserContext db = new UserContext())
-            {
-                User user1 = new User { SteamID = 76561198228943628, RealName = "Soctarian" };
-                db.Users.Add(user1);
-                db.SaveChanges();
-
-                Console.WriteLine("Объекты успешно сохранены");
-
-                var users = db.Users;
-                Console.WriteLine("Список объектов:");
-                foreach (User user in users)
-                {
-                    Console.WriteLine("{0} - {1}", user.SteamID, user.RealName);
-                }
-            }
+            PlayerComparison comparator = new PlayerComparison();
+            comparator.TimeComparison(268677900, 268677900, 7);
 
             Console.ReadKey();
         }
