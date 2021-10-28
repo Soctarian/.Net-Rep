@@ -22,19 +22,10 @@ namespace DeserializeObjects
         public decimal TimeCreated { get; set; }
         public string RealName { get; set; }
 
-        public T GetUserString<T>(decimal UserSteamID)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=A80EC4AFFB0862E8476DFD2967292B79&steamids={UserSteamID}");
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            {
-                using (StreamReader sr = new StreamReader(stream))
-                    return JsonConvert.DeserializeObject<T>(sr.ReadToEnd());
-            }
-        }
+ 
         public void DeterminatePlayerInfo(decimal UserSteamID)
         {
-            var DeserializedObject = GetUserString<GetPlayerSummaries.Root>(UserSteamID);
+            var DeserializedObject = GetUrls.GetUserString<GetPlayerSummaries.Root>(UserSteamID);
             var Player = DeserializedObject.response.Players;
             foreach (var user in Player)
             {

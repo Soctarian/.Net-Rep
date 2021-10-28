@@ -26,7 +26,7 @@ namespace Controllers
             for (int i = 7; i > 4; i--) threelastbites += ConvertedDataArray[i];
             int playerpos = Convert.ToInt32(Convert.ToSByte(threelastbites));
             Team_Pos.Add("Position", playerpos);
-
+            //Team : Radiant - 1, Dire - 0;
             return Team_Pos;
         }
         public static string PlayerStatusDecipher(int ProfileState)

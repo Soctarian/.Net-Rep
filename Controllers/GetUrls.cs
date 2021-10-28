@@ -9,6 +9,18 @@ namespace DeserializeObjects
 {
     public class GetUrls
     {
+
+        public static T GetUserString<T>(decimal UserSteamID)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=A80EC4AFFB0862E8476DFD2967292B79&steamids={UserSteamID}");
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            {
+                using (StreamReader sr = new StreamReader(stream))
+                    return JsonConvert.DeserializeObject<T>(sr.ReadToEnd());
+            }
+        }
+
         public static T GetWebResponseString<T>(Uri url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);

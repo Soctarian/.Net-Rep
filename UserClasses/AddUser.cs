@@ -13,7 +13,7 @@ namespace UserClasses
         public static void AttachUser(long UserSteamID)
         {
             GetUserInfo getinfo = new GetUserInfo();
-            var DeserializedObject = getinfo.GetUserString<GetPlayerSummaries.Root>(UserSteamID);
+            var DeserializedObject = GetUrls.GetUserString<GetPlayerSummaries.Root>(UserSteamID);
             var Player = DeserializedObject.response.Players;
             getinfo.DeterminatePlayerInfo(UserSteamID);
 

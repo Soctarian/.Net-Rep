@@ -40,9 +40,8 @@ namespace Project
             //db testing
             //AddUser.AttachUser(76561198430945445);
 
-            PlayerComparison comparator = new PlayerComparison();
-            comparator.TimeComparison(268677900, 268677900, 7);
-
+            PlayerComparison comparator = new PlayerComparison(268677900, 171981096, 7);
+            InputComparisonInfo.InputTimeComparison(comparator.TimeComparison(), 7);
             Console.ReadKey();
         }
     }
