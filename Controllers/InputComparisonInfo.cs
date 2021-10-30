@@ -6,21 +6,33 @@ namespace Controllers
 {
     public class InputComparisonInfo
     {
+        static Dictionary<string, double> TimeOdd(double[] TimeSummaries)
+        { 
+            double distinction;
+            Dictionary<string, double> timeOdd = new Dictionary<string, double>();
+            if (TimeSummaries[0] * 60 + TimeSummaries[1] > TimeSummaries[2] * 60 + TimeSummaries[3])  distinction = (TimeSummaries[0] + TimeSummaries[1] / 100.0) - (TimeSummaries[2] + TimeSummaries[3] / 100.0);
+            else  distinction = (TimeSummaries[2] + TimeSummaries[3] / 100.0) - (TimeSummaries[0] + TimeSummaries[1] / 100.0);
+
+            timeOdd.Add("hours", Math.Floor(distinction));
+            timeOdd.Add("minutes", Math.Round((distinction - Math.Floor(distinction))*100-40));
+            return timeOdd;
+        }
         public static void InputTimeComparison(double[] TimeSummaries, int time)
         {
-            //Подкорректировать вывод разницы + нормально округлить минуты + подкорректировать проверку на большее время мем
-            if (TimeSummaries[0] + TimeSummaries[1] > TimeSummaries[2] + TimeSummaries[3])
+            var Distinction = TimeOdd(TimeSummaries);
+            
+            if (TimeSummaries[0]*60 + TimeSummaries[1] > TimeSummaries[2]*60 + TimeSummaries[3])
             {
-                Console.Write($"First Player: hours - " + TimeSummaries[0] + " minutes - " + TimeSummaries[1] + "\n" +
-                "Second Player: hours - " + TimeSummaries[2] + " minutes - " + TimeSummaries[3] +
-                "First player played " + (TimeSummaries[0] - TimeSummaries[2]) + " hours and " + Math.Round((TimeSummaries[1] - TimeSummaries[3])) + " minutes more,\nthen the Second player" +
+                Console.Write($"First Player: " + TimeSummaries[0] + " hours,  " + Math.Round(TimeSummaries[1]) + " minutes\n" +
+                "Second Player: " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + " minutes\n" +
+                "First player played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the Second player" +
                 "in " + time + " days");
             }
-            else if (TimeSummaries[0] + TimeSummaries[1] < TimeSummaries[2] + TimeSummaries[3])
+            else if (TimeSummaries[0]*60 + TimeSummaries[1] < TimeSummaries[2]*60 + TimeSummaries[3])
             {
-                Console.Write($"First Player: hours - " + TimeSummaries[0] + " minutes - " + TimeSummaries[1] + "\n" +
-                "Second Player: hours - " + TimeSummaries[2] + " minutes - " + TimeSummaries[3] +
-                "Second player played " + (TimeSummaries[2] - TimeSummaries[0]) + " hours and " + Math.Round((TimeSummaries[3] - TimeSummaries[1])) + " minutes more,\nthen the First player" +
+                Console.Write($"First Player: " + TimeSummaries[0] + "  hours, " + Math.Round(TimeSummaries[1]) + " minutes\n" +
+                "Second Player: " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + "  minutes\n" + 
+                "Second player played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the First player" +
                 "in " + time + " days");
             }
             else

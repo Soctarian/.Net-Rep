@@ -8,6 +8,7 @@ namespace Controllers
 {
     public class InputMatchInfo
     {
+        private decimal matchID;
         public InputMatchInfo(IOutputHandler outputHandler)
         {
             OutputHandler = outputHandler;
@@ -16,7 +17,10 @@ namespace Controllers
         {
 
         }
-
+        public InputMatchInfo(decimal matchID)
+        {
+            this.matchID = matchID;
+        }
         public static double WinRate;
 
         public IOutputHandler OutputHandler { get; }
@@ -55,19 +59,19 @@ namespace Controllers
                     }
                 }
 
-                OutputHandler.Output(OutputResult);
+                Console.WriteLine(OutputResult);
             }
             WinRate = Math.Round(((WinCounts / (double)countMatches) * 100), 5);
             Console.WriteLine($"Winrate for {countMatches} matches: {WinRate}%");
 
         }
 
-        public void InputFullkMatchStatistic(decimal MatchId)
+        public void InputFullkMatchStatistic(decimal MatchID)
         {
             GetUserInfo user = new GetUserInfo();
             var HeroDictionary = HeroAndItemsDictionary.FillHeroDictionary();
             string OutputResult = "Radiant:\n";
-            var MatchObject = GetUrls.GetMatchDetailsUrl(MatchId);
+            var MatchObject = GetUrls.GetMatchDetailsUrl(MatchID);
             List<GetMatchDetails.Player> Players = MatchObject.result.players;
             int iter = 0;
 
@@ -84,12 +88,12 @@ namespace Controllers
             Console.Write(OutputResult);
         }
 
-        public void InputDetailMatchStatistic(decimal MatchID, string Hero)
+        public void InputDetailMatchStatistic(string Hero, decimal matchID)
         {
             var ItemDictionary = HeroAndItemsDictionary.FillItemDictionary();
             var HeroDictionary = HeroAndItemsDictionary.FillHeroDictionary();
             string OutputResult = $"{Hero} stats:\n";
-            var MatchObject = GetUrls.GetMatchDetailsUrl(MatchID);
+            var MatchObject = GetUrls.GetMatchDetailsUrl(matchID);
             List<GetMatchDetails.Player> Players = MatchObject.result.players;
             GetMatchDetails.Player Player = Players.First(player => HeroDictionary[player.hero_id] == Hero);
             OutputResult += $"Player level : {Player.level}, GPM - {Player.gold_per_min}, EPM - {Player.xp_per_min}, Hero damage - {Player.hero_damage}, Tower Damage - {Player.tower_damage}, Hero healing - {Player.hero_healing}\n" +
