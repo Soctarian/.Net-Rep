@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Controllers\Controllers.csproj" />
     <ProjectReference Include="..\DeserializeObjects\DeserializeObjects.csproj" />
   </ItemGroup>
 

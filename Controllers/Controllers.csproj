@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DeserializeObjects\DeserializeObjects.csproj" />
+    <ProjectReference Include="..\UserClasses\UserClasses.csproj" />
   </ItemGroup>
 
 </Project>

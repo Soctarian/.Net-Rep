@@ -7,7 +7,7 @@ namespace Controllers
     public class KeyboardMenu
     {
         private int SelectedIndex;
-        private string[] Options;
+        public string[] Options;
         private string Promt;
 
         public KeyboardMenu(string promt, string[] options)
@@ -16,7 +16,7 @@ namespace Controllers
             Options = options;
             SelectedIndex = 0;
         }
-        private void DisplayOptions()
+        public void DisplayOptions()
         {
             WriteLine(Promt);
             for(int i =0; i<Options.Length; i++)

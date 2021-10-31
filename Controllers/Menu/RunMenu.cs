@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UserClasses;
 using static System.Console;
 
 namespace Controllers.Menu
@@ -32,10 +33,12 @@ namespace Controllers.Menu
                     RunInputMatchStatistic();
                     break;
                 case 1:
+                    RunAddUserToDB();
+                    break;
+                case 2:
+                    RunComparasive();
                     break;
                 case 3:
-                    break;
-                case 4:
                     Exit();
                     break;
                 default:
@@ -67,11 +70,21 @@ namespace Controllers.Menu
                     Write("Input match ID: ");
                     var matchID = Convert.ToDecimal(ReadLine());
                     inputMatchInfo.InputFullkMatchStatistic(matchID);
-                    RunStatisticForHeroInMatch(matchID);
 
-                    WriteLine("If you want to return to the match statistic menu, press any key");
-                    ReadKey(true);
-                    RunInputMatchStatistic();
+                    WriteLine("Press y, if you want to get statistic for exact hero");
+                    ConsoleKeyInfo keyInfo = ReadKey(true);
+                    ConsoleKey keyPressed = keyInfo.Key;
+                    if (keyPressed == ConsoleKey.Y)
+                    {
+                        RunStatisticForHeroInMatch(matchID);
+                    }
+                    else
+                    {
+                        WriteLine("If you want to return to the match statistic menu, press any key");
+                        ReadKey(true);
+                        RunInputMatchStatistic();
+                    }
+
                     break;
                 case 2:
                     RunMainMenu();
@@ -87,37 +100,52 @@ namespace Controllers.Menu
         public void RunStatisticForHeroInMatch(decimal matchID)
         {
             InputMatchInfo inputMatchInfo = new InputMatchInfo();
-            string promt = "Check statistic for exact hero?";
-            string[] options = { "Yes", "Exit" };
-            KeyboardMenu heroStatisticMenu = new KeyboardMenu(promt, options);
-            int selectedIndex = heroStatisticMenu.Run();
 
+            Write("Input hero name: ");
+            var hero = ReadLine();
+            inputMatchInfo.InputDetailMatchStatistic(hero, matchID);
+
+            WriteLine("If you want to back to the statistic menu, press any key");
+            ReadKey(true);
+            RunInputMatchStatistic();
+
+        }
+        public void RunAddUserToDB()
+        {
+            AddUser.AttachUser(Convert.ToInt64(Deciphers.ConvertToSteamID64(profileID32)));
+        }
+        public void RunComparasive()
+        {
+            string promt = "Choose what kind of comparasive you wanna do";
+            string[] options = { "Time played comparasive", "Winrate comparasive", "Back to main menu", "Exit" };
+            KeyboardMenu сomparasiveMenu = new KeyboardMenu(promt, options);
+            int selectedIndex = сomparasiveMenu.Run();
             switch (selectedIndex)
             {
                 case 0:
-                    Write("Input hero name: "); 
-                    var hero = ReadLine();
-                    inputMatchInfo.InputDetailMatchStatistic(hero, matchID);
+                    Write("Enter the id of the player with whom you want to compare the time spent in the game: ");
+                    var secondID = Convert.ToDecimal(ReadLine());
+                    Write("Enter the number of days which you want to compare time for: ");
+                    var time = Convert.ToInt32(ReadLine());
+                    PlayerComparison comaprison = new PlayerComparison(profileID32, secondID, time);
+                    InputComparisonInfo.InputTimeComparison(comaprison.TimeComparison(), time);
 
-                    WriteLine("If you want to back to the statistic menu, press any key");
+                    WriteLine("\nIf you want to back to the comparison menu, press any key");
                     ReadKey(true);
-                    RunInputMatchStatistic();
+                    RunComparasive();
                     break;
                 case 1:
-                    ReadKey(true);
+
+                    break;
+                case 2:
+                    RunMainMenu();
+                    break;
+                case 3:
                     Exit();
                     break;
                 default:
                     break;
             }
-        }
-        public void RunAddUserToDB()
-        {
-
-        }
-        public void RunComparasive()
-        {
-
         }
 
         public void Exit()
