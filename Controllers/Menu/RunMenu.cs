@@ -123,7 +123,7 @@ namespace Controllers.Menu
             switch (selectedIndex)
             {
                 case 0:
-                    Write("Enter the id of the player with whom you want to compare the time spent in the game: ");
+                    Write("Enter the id of the player with whom you want to compare time spent in the game: ");
                     var secondID = Convert.ToDecimal(ReadLine());
                     Write("Enter the number of days which you want to compare time for: ");
                     var time = Convert.ToInt32(ReadLine());
@@ -135,7 +135,16 @@ namespace Controllers.Menu
                     RunComparasive();
                     break;
                 case 1:
+                    Write("Enter the id of the player with whom you want to compare match results in the game: ");
+                    secondID = Convert.ToDecimal(ReadLine());
+                    Write("Enter the number of days which you want to compare time for: ");
+                    time = Convert.ToInt32(ReadLine());
+                    comaprison = new PlayerComparison(profileID32, secondID, time);
+                    InputComparisonInfo.InputWinrateComparison(comaprison.WinRateAndRankComparison(), time);
 
+                    WriteLine("\nIf you want to back to the comparison menu, press any key");
+                    ReadKey(true);
+                    RunComparasive();
                     break;
                 case 2:
                     RunMainMenu();

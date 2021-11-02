@@ -41,6 +41,21 @@ namespace Controllers
             PlayerStatus.Add(6, "Looking for play");
             return PlayerStatus[ProfileState];
         }
+
+        public static int WinChecker(Dictionary<string, int> PlayerSlot, bool radiantWins)
+        {
+            int Wins = 0;
+            switch (PlayerSlot["Team"])
+            {
+                case 0:
+                    Wins = radiantWins ? 1 : 0;
+                    break;
+                case 1:
+                    Wins = radiantWins ? 0 : 1;
+                    break;
+            }
+            return Wins; 
+        }
         public static decimal ConvertToSteamID32(decimal SteamID64) => SteamID64 - 76561197960265728;
         public static decimal ConvertToSteamID64(decimal SteamID32) => SteamID32 + 76561197960265728;
 

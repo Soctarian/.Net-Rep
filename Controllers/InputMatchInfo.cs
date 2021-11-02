@@ -21,7 +21,8 @@ namespace Controllers
         {
             this.matchID = matchID;
         }
-        public static double WinRate;
+
+        private static double WinRate;
 
         public IOutputHandler OutputHandler { get; }
 
@@ -39,25 +40,21 @@ namespace Controllers
                 OutputResult = $"{i + 1} match: Match ID - {IDs[i]}, Player team - ";
                 deserializedList.Add(GetUrls.GetMatchDetailsUrl(IDs[i]));
                 bool radiantWins = deserializedList[i].result.radiant_win;
-                foreach (var player in deserializedList[i].result.players)
+                GetMatchDetails.Player player = deserializedList[i].result.players.First(player => player.account_id == accountId);
+                var PlayerSlot = Deciphers.PlayerSlotDecipher(player.player_slot);
+                switch (PlayerSlot["Team"])
                 {
-                    if (player.account_id == accountId)
-                    {
-                        var PlayerSlot = Deciphers.PlayerSlotDecipher(player.player_slot);
-                        switch (PlayerSlot["Team"])
-                        {
-                            case 0:
-                                OutputResult += "Radiant";
-                                WinCounts += radiantWins ? 1 : 0;
-                                break;
-                            case 1:
-                                OutputResult += "Dire";
-                                WinCounts += radiantWins ? 0 : 1;
-                                break;
-                        }
-                        OutputResult += $", Hero - {HeroDictionary[player.hero_id]}, KDA = {Math.Round(((player.kills + player.assists) / (double)player.deaths), 1)}, GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}";
-                    }
+                    case 0:
+                        OutputResult += "Radiant";
+                        WinCounts += radiantWins ? 1 : 0;
+                        break;
+                    case 1:
+                        OutputResult += "Dire";
+                        WinCounts += radiantWins ? 0 : 1;
+                        break;
                 }
+                OutputResult += $", Hero - {HeroDictionary[player.hero_id]}, KDA = {Math.Round(((player.kills + player.assists) / (double)player.deaths), 1)}, GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}";
+
 
                 Console.WriteLine(OutputResult);
             }
