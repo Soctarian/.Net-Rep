@@ -10,7 +10,7 @@ namespace UserClasses
     public class UserContext : DbContext
     {
         public UserContext()
-          : base("DbConnection")
+          : base("Project")
         { }
 
         public DbSet<User> Users { get; set; }
@@ -18,9 +18,11 @@ namespace UserClasses
 
     public class User
     {
+        [MaxLength(17),MinLength(17)]
+        [Index("UX_Steam_ID", IsUnique = true)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int UniqID { get; set; }
+     // public int UniqID { get; set; }
         public long SteamID { get; set; }
         public int CommunityVisible { get; set; }
         public int CommentPermission { get; set; }
@@ -31,6 +33,20 @@ namespace UserClasses
         public string RealName { get; set; }
         public string ProfileName { get; set; }
 
+        [MaxLength(20), MinLength(6)]
+        public string Password { get; set; }
+
+        public string HashedPassword { get; set; }
+
+        public List<Matches> Matches { get; set; }
+
+    }
+    public class Matches
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public long MatchID { get; set; }
+        public decimal StartTime { get; set; }
     }
 
 }

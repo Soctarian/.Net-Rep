@@ -16,9 +16,51 @@ namespace Controllers.Menu
             this.profileID32 = profileID32;
         }
 
+        public void LoginScreen()
+        {
+            
+        }
+
         public void StartMenu()
         {
             RunMainMenu();
+        }
+
+        public void RunLoginWindow()
+        {
+            string promt = "Sign up, or sign in";
+            string[] options = { "Sign up", "Sign in", "Exit" };
+            KeyboardMenu loginMenu = new KeyboardMenu(promt, options);
+            int SelectedIndex = loginMenu.Run();
+
+            switch (SelectedIndex)
+            {
+                case 0:
+                    Write("\nInput your SteamID: ");
+                    var SteamID = Convert.ToInt64(ReadLine());
+                    Write("\nInput password: ");
+                    var FirstPassword = ReadLine();
+                    Write("\nConfirm your password: ");
+                    var ConfirmPassword = ReadLine();
+                    AddUser.RegisterUser(SteamID, FirstPassword, ConfirmPassword);
+                    break;
+                case 1:
+                   /* do
+                    {
+                        Clear();
+                        Write("\nInput your SteamID: ");
+                        SteamID = Convert.ToInt64(ReadLine());
+                        Write("\nInput password: ");
+                        FirstPassword = ReadLine();
+                    }while(!Deciphers.VerifyHashedPassword(User.HashPassword, FirstPassword))*/
+                    break;
+                case 2:
+                    Exit();
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         public void RunMainMenu()
@@ -97,6 +139,7 @@ namespace Controllers.Menu
             }
 
         }
+
         public void RunStatisticForHeroInMatch(decimal matchID)
         {
             InputMatchInfo inputMatchInfo = new InputMatchInfo();
@@ -110,10 +153,12 @@ namespace Controllers.Menu
             RunInputMatchStatistic();
 
         }
+
         public void RunAddUserToDB()
         {
             AddUser.AttachUser(Convert.ToInt64(Deciphers.ConvertToSteamID64(profileID32)));
         }
+
         public void RunComparasive()
         {
             string promt = "Choose what kind of comparasive you wanna do";
@@ -127,7 +172,7 @@ namespace Controllers.Menu
                     var secondID = Convert.ToDecimal(ReadLine());
                     Write("Enter the number of days which you want to compare time for: ");
                     var time = Convert.ToInt32(ReadLine());
-                    PlayerComparison comaprison = new PlayerComparison(profileID32, secondID, time);
+                    PlayerComparison comaprison = new PlayerComparison(this.profileID32, secondID, time);
                     InputComparisonInfo.InputTimeComparison(comaprison.TimeComparison(), time);
 
                     WriteLine("\nIf you want to back to the comparison menu, press any key");
@@ -139,7 +184,7 @@ namespace Controllers.Menu
                     secondID = Convert.ToDecimal(ReadLine());
                     Write("Enter the number of days which you want to compare time for: ");
                     time = Convert.ToInt32(ReadLine());
-                    comaprison = new PlayerComparison(profileID32, secondID, time);
+                    comaprison = new PlayerComparison(this.profileID32, secondID, time);
                     InputComparisonInfo.InputWinrateComparison(comaprison.WinRateAndRankComparison(), time);
 
                     WriteLine("\nIf you want to back to the comparison menu, press any key");

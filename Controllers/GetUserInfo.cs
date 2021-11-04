@@ -21,7 +21,7 @@ namespace DeserializeObjects
         public decimal LastLogOff { get; set; }
         public decimal TimeCreated { get; set; }
         public string RealName { get; set; }
-
+        
  
         public void DeterminatePlayerInfo(decimal UserSteamID)
         {
@@ -40,6 +40,7 @@ namespace DeserializeObjects
                 TimeCreated = user.TimeCreated;
                 RealName = user.RealName;
                 UserSteamID32 = user.SteamID - 76561197960265728; 
+                
             }
         }
 
