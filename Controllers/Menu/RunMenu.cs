@@ -15,10 +15,11 @@ namespace Controllers.Menu
         {
             this.profileID32 = profileID32;
         }
+        public RunMenu() { }
 
         public void LoginScreen()
         {
-            
+            RunLoginWindow();
         }
 
         public void StartMenu()
@@ -36,23 +37,46 @@ namespace Controllers.Menu
             switch (SelectedIndex)
             {
                 case 0:
-                    Write("\nInput your SteamID: ");
-                    var SteamID = Convert.ToInt64(ReadLine());
-                    Write("\nInput password: ");
-                    var FirstPassword = ReadLine();
-                    Write("\nConfirm your password: ");
-                    var ConfirmPassword = ReadLine();
-                    AddUser.RegisterUser(SteamID, FirstPassword, ConfirmPassword);
-                    break;
-                case 1:
-                   /* do
+                    long SteamID;
+                    string Password, ConfirmPassword;
+                    do
                     {
                         Clear();
                         Write("\nInput your SteamID: ");
                         SteamID = Convert.ToInt64(ReadLine());
                         Write("\nInput password: ");
-                        FirstPassword = ReadLine();
-                    }while(!Deciphers.VerifyHashedPassword(User.HashPassword, FirstPassword))*/
+                        Password = ReadLine();
+                        Write("\nConfirm your password: ");
+                        ConfirmPassword = ReadLine();
+                        if (!PasswordEquality(Password, ConfirmPassword)) WriteLine("Password missmatch!\nPress any key");
+                        ReadKey(true);
+
+                    } while (!PasswordEquality(Password, ConfirmPassword));
+                    AddUser.RegisterUser(SteamID, Password);
+                    WriteLine("Succesfully registrated!");
+                    RunLoginWindow();
+                    break;
+                case 1:
+
+                    do {
+                        Clear();
+                        Write("\nInput your SteamID: ");
+                        SteamID = Convert.ToInt64(ReadLine());
+                        Write("\nInput password: ");
+                        Password = ReadLine();
+                        if(!AddUser.CheckUser(SteamID, Password))
+                        {
+                            WriteLine("Your password is incorrect!");
+                            WriteLine("Press R, if you want create an account or try again");
+                            ConsoleKeyInfo keyInfo = ReadKey(true);
+                            ConsoleKey keyPressed = keyInfo.Key;
+                            if (keyPressed == ConsoleKey.R)
+                            {
+                                RunLoginWindow();
+                            }
+                        }
+                    } while (!AddUser.CheckUser(SteamID, Password));
+                    StartMenu();
                     break;
                 case 2:
                     Exit();
@@ -208,6 +232,7 @@ namespace Controllers.Menu
             ReadKey(true);
             Environment.Exit(0);
         }
+        public bool PasswordEquality(string Password, string ConfirmPassword) => Password == ConfirmPassword ? true : false;
 
     }
 }

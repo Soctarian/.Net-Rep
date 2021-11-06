@@ -18,9 +18,8 @@ namespace UserClasses
 
     public class User
     {
-        [MaxLength(17),MinLength(17)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Index("UX_Steam_ID", IsUnique = true)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
      // public int UniqID { get; set; }
         public long SteamID { get; set; }

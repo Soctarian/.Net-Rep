@@ -110,7 +110,6 @@ namespace Controllers
             {
                 buffer4 = bytes.GetBytes(0x20);
             }
-
             return ByteArraysEqual(buffer3, buffer4);
         }
 
@@ -123,7 +122,7 @@ namespace Controllers
             {
                 if (b1[i] != b2[i]) return false;
             }
-            return true;
+            return true; 
         }
 
         public static decimal ConvertToSteamID32(decimal steamID64) => steamID64 - 76561197960265728;

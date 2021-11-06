@@ -35,10 +35,8 @@ namespace UserClasses
             }
         }
 
-        public static void RegisterUser(long UserSteamID, string FirstTimePassword, string ConfirmPassword)
+        public static void RegisterUser(long UserSteamID, string Password)
         {
-            if (FirstTimePassword == ConfirmPassword)
-            {
                 GetUserInfo getinfo = new GetUserInfo();
                 getinfo.DeterminatePlayerInfo(UserSteamID);
 
@@ -55,18 +53,21 @@ namespace UserClasses
                         TimeCreated = getinfo.TimeCreated,
                         RealName = getinfo.RealName,
                         ProfileName = getinfo.Login,
-                        Password = FirstTimePassword,
-                        HashedPassword = Deciphers.HashPassword(FirstTimePassword)
+                        Password = Password,
+                        HashedPassword = Deciphers.HashPassword(Password)
                     };
                     db.Users.Add(user);
                     db.SaveChanges();
                 }
-                Console.WriteLine("Registration completed successfully!");
-            }
-            else
-            {
-                Console.WriteLine("Password mismatch!");
-            }
         }
+
+        public static bool CheckUser(long SteamID, string Password)
+        {
+            bool isLogged = false;
+            UserContext user = new UserContext();
+            if (Deciphers.VerifyHashedPassword(user.Users.Find(SteamID).HashedPassword, Password)) isLogged = true; 
+            return isLogged;
+        }
+
     }
 }

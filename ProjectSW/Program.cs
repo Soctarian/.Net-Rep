@@ -26,11 +26,11 @@ namespace Project
 
         static void Main(string[] args)
         {
-            Console.Write("Input profile ID: ");
-            var accountId = Convert.ToDecimal(Console.ReadLine());
+           // Console.Write("Input profile ID: ");
+           // var accountId = Convert.ToDecimal(Console.ReadLine());
 
-            RunMenu menu = new RunMenu(accountId);
-            menu.StartMenu();
+            RunMenu menu = new RunMenu();
+            menu.LoginScreen();
 
             Console.ReadKey(true);
         }
