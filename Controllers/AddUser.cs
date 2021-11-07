@@ -64,9 +64,14 @@ namespace UserClasses
         public static bool CheckUser(long SteamID, string Password)
         {
             bool isLogged = false;
-            UserContext user = new UserContext();
+            var user = new UserContext();
             if (Deciphers.VerifyHashedPassword(user.Users.Find(SteamID).HashedPassword, Password)) isLogged = true; 
             return isLogged;
+        }
+        public static User GetUser(long SteamID)
+        {
+            var user = new UserContext();
+            return user.Users.Find(SteamID);
         }
 
     }

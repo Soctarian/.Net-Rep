@@ -10,7 +10,6 @@ namespace Controllers.Menu
     {
 
         private decimal profileID32;
-
         public RunMenu(decimal profileID32)
         {
             this.profileID32 = profileID32;
@@ -22,9 +21,9 @@ namespace Controllers.Menu
             RunLoginWindow();
         }
 
-        public void StartMenu()
+        public void StartMenu(User user)
         {
-            RunMainMenu();
+            RunMainMenu(user);
         }
 
         public void RunLoginWindow()
@@ -76,7 +75,7 @@ namespace Controllers.Menu
                             }
                         }
                     } while (!AddUser.CheckUser(SteamID, Password));
-                    StartMenu();
+                    StartMenu(AddUser.GetUser(SteamID));
                     break;
                 case 2:
                     Exit();
@@ -87,22 +86,22 @@ namespace Controllers.Menu
 
         }
 
-        public void RunMainMenu()
+        public void RunMainMenu(User user)
         {
-            string promt = "Welcome to my .Net project!";
+            string promt = $"{user.ProfileName}, welcome to my .Net project!";
             string[] options = { "Input match statistic", "Add user to db", "Comparasive", "Exit" };
             KeyboardMenu mainMenu = new KeyboardMenu(promt, options);
             int SelectedIndex = mainMenu.Run();
             switch (SelectedIndex)
             {
                 case 0:
-                    RunInputMatchStatistic();
+                    RunInputMatchStatistic(user);
                     break;
                 case 1:
                     RunAddUserToDB();
                     break;
                 case 2:
-                    RunComparasive();
+                    RunComparasive(user);
                     break;
                 case 3:
                     Exit();
@@ -113,7 +112,7 @@ namespace Controllers.Menu
 
         }
 
-        public void RunInputMatchStatistic()
+        public void RunInputMatchStatistic(User user)
         {
             InputMatchInfo inputMatchInfo = new InputMatchInfo();
             string promt = "Choose what kind of statistic you wanna get: ";
@@ -126,11 +125,11 @@ namespace Controllers.Menu
                 case 0:
                     Write("\nInput number of matches: ");
                     var countMathces = Convert.ToInt32(ReadLine());
-                    inputMatchInfo.InputQuickMatchStatistic(countMathces, profileID32);
+                    inputMatchInfo.InputQuickMatchStatistic(countMathces, Deciphers.ConvertToSteamID32(user.SteamID));
 
                     WriteLine("If you want to return to the match statistic menu, press any key");
                     ReadKey(true);
-                    RunInputMatchStatistic();
+                    RunInputMatchStatistic(user);
                     break;
                 case 1:
                     Write("Input match ID: ");
@@ -142,18 +141,18 @@ namespace Controllers.Menu
                     ConsoleKey keyPressed = keyInfo.Key;
                     if (keyPressed == ConsoleKey.Y)
                     {
-                        RunStatisticForHeroInMatch(matchID);
+                        RunStatisticForHeroInMatch(matchID, user);
                     }
                     else
                     {
                         WriteLine("If you want to return to the match statistic menu, press any key");
                         ReadKey(true);
-                        RunInputMatchStatistic();
+                        RunInputMatchStatistic(user);
                     }
 
                     break;
                 case 2:
-                    RunMainMenu();
+                    RunMainMenu(user);
                     break;
                 case 3:
                     Exit();
@@ -164,7 +163,7 @@ namespace Controllers.Menu
 
         }
 
-        public void RunStatisticForHeroInMatch(decimal matchID)
+        public void RunStatisticForHeroInMatch(decimal matchID, User user)
         {
             InputMatchInfo inputMatchInfo = new InputMatchInfo();
 
@@ -174,16 +173,16 @@ namespace Controllers.Menu
 
             WriteLine("If you want to back to the statistic menu, press any key");
             ReadKey(true);
-            RunInputMatchStatistic();
+            RunInputMatchStatistic(user);
 
         }
 
         public void RunAddUserToDB()
         {
-            AddUser.AttachUser(Convert.ToInt64(Deciphers.ConvertToSteamID64(profileID32)));
+            
         }
 
-        public void RunComparasive()
+        public void RunComparasive(User user)
         {
             string promt = "Choose what kind of comparasive you wanna do";
             string[] options = { "Time played comparasive", "Winrate comparasive", "Back to main menu", "Exit" };
@@ -196,27 +195,27 @@ namespace Controllers.Menu
                     var secondID = Convert.ToDecimal(ReadLine());
                     Write("Enter the number of days which you want to compare time for: ");
                     var time = Convert.ToInt32(ReadLine());
-                    PlayerComparison comaprison = new PlayerComparison(this.profileID32, secondID, time);
+                    PlayerComparison comaprison = new PlayerComparison(Deciphers.ConvertToSteamID32(user.SteamID), secondID, time);
                     InputComparisonInfo.InputTimeComparison(comaprison.TimeComparison(), time);
 
                     WriteLine("\nIf you want to back to the comparison menu, press any key");
                     ReadKey(true);
-                    RunComparasive();
+                    RunComparasive(user);
                     break;
                 case 1:
                     Write("Enter the id of the player with whom you want to compare match results in the game: ");
                     secondID = Convert.ToDecimal(ReadLine());
                     Write("Enter the number of days which you want to compare time for: ");
                     time = Convert.ToInt32(ReadLine());
-                    comaprison = new PlayerComparison(this.profileID32, secondID, time);
+                    comaprison = new PlayerComparison(Deciphers.ConvertToSteamID32(user.SteamID), secondID, time);
                     InputComparisonInfo.InputWinrateComparison(comaprison.WinRateAndRankComparison(), time);
 
                     WriteLine("\nIf you want to back to the comparison menu, press any key");
                     ReadKey(true);
-                    RunComparasive();
+                    RunComparasive(user);
                     break;
                 case 2:
-                    RunMainMenu();
+                    RunMainMenu(user);
                     break;
                 case 3:
                     Exit();
