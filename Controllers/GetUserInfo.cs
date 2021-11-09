@@ -5,8 +5,9 @@ using System.Net;
 using System.Text;
 using DeserializeObjects;
 using Newtonsoft.Json;
-using Controllers;
-namespace DeserializeObjects
+using UserClasses;
+
+namespace Controllers
 {
     public class GetUserInfo
     {

@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserClasses", "UserClasses\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendAPICallService", "SendAPICallService\SendAPICallService.csproj", "{FC26F9AB-937B-45F8-9433-93386F897F0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetApiResponseService", "GetApiResponseServer\GetApiResponseService.csproj", "{DC929258-8E77-4A03-8207-BA2DB681056C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetAPI_Response", "GetAPI_Response\GetAPI_Response.csproj", "{52D78506-F680-4F9D-A8B9-388E5C155AA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{FC26F9AB-937B-45F8-9433-93386F897F0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC26F9AB-937B-45F8-9433-93386F897F0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC26F9AB-937B-45F8-9433-93386F897F0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC929258-8E77-4A03-8207-BA2DB681056C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC929258-8E77-4A03-8207-BA2DB681056C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC929258-8E77-4A03-8207-BA2DB681056C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC929258-8E77-4A03-8207-BA2DB681056C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52D78506-F680-4F9D-A8B9-388E5C155AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52D78506-F680-4F9D-A8B9-388E5C155AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52D78506-F680-4F9D-A8B9-388E5C155AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52D78506-F680-4F9D-A8B9-388E5C155AA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

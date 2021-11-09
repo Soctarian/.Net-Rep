@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UserClasses;
+using Controllers;
+
 
 namespace Controllers
 {
@@ -10,29 +13,42 @@ namespace Controllers
         {
             double distinction;
             Dictionary<string, double> timeOdd = new Dictionary<string, double>();
-            if (TimeSummaries[0] * 60 + TimeSummaries[1] > TimeSummaries[2] * 60 + TimeSummaries[3]) distinction = (TimeSummaries[0] + TimeSummaries[1] / 100.0) - (TimeSummaries[2] + TimeSummaries[3] / 100.0);
-            else distinction = (TimeSummaries[2] + TimeSummaries[3] / 100.0) - (TimeSummaries[0] + TimeSummaries[1] / 100.0);
+            if (TimeSummaries[0] * 60 + TimeSummaries[1] > TimeSummaries[2] * 60 + TimeSummaries[3]) distinction = (Math.Round(TimeSummaries[0]) + Math.Round(TimeSummaries[1]) / 100.0) - (Math.Round(TimeSummaries[2]) + Math.Round(TimeSummaries[3]) / 100.0);
+            else distinction = (Math.Round(TimeSummaries[2]) + Math.Round(TimeSummaries[3]) / 100.0) - (Math.Round(TimeSummaries[0]) + Math.Round(TimeSummaries[1]) / 100.0);
 
-            timeOdd.Add("hours", Math.Floor(distinction));
-            timeOdd.Add("minutes", Math.Round((distinction - Math.Floor(distinction)) * 100 - 40));
+            if(Math.Round((distinction - Math.Floor(distinction)) * 100 - 40)>0)
+            {
+                timeOdd.Add("hours", Math.Round(Math.Floor(distinction)));
+                timeOdd.Add("minutes", Math.Round((distinction - Math.Floor(distinction)) * 100 - 40));
+            }
+            else
+            {
+                timeOdd.Add("hours", Math.Round(Math.Floor(distinction))-1);
+                timeOdd.Add("minutes", Math.Round((distinction - Math.Floor(distinction)) * 100 + 20));
+            }
             return timeOdd;
         }
         public static void InputTimeComparison(double[] TimeSummaries, int time)
         {
-            var Distinction = TimeOdd(TimeSummaries);
+            var getFirstPlayerInfo = new GetUserInfo();
+            getFirstPlayerInfo.DeterminatePlayerInfo(Deciphers.ConvertToSteamID64(Convert.ToDecimal(TimeSummaries[4])));
+            var getSecondPlayerInfo = new GetUserInfo();
+            getSecondPlayerInfo.DeterminatePlayerInfo(Deciphers.ConvertToSteamID64(Convert.ToDecimal(TimeSummaries[5])));
 
+            var Distinction = TimeOdd(TimeSummaries);
+            
             if (TimeSummaries[0] * 60 + TimeSummaries[1] > TimeSummaries[2] * 60 + TimeSummaries[3])
             {
-                Console.Write($"First Player: " + TimeSummaries[0] + " hours,  " + Math.Round(TimeSummaries[1]) + " minutes\n" +
-                "Second Player: " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + " minutes\n" +
-                "First player played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the Second player" +
+                Console.Write($"{getFirstPlayerInfo.Login}: " + TimeSummaries[0] + " hours,  " + Math.Round(TimeSummaries[1]) + " minutes\n" +
+                 getSecondPlayerInfo.Login + ": " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + " minutes\n" +
+                 getFirstPlayerInfo.Login + " played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the "+ getSecondPlayerInfo.Login +
                 "in " + time + " days");
             }
             else if (TimeSummaries[0] * 60 + TimeSummaries[1] < TimeSummaries[2] * 60 + TimeSummaries[3])
             {
-                Console.Write($"First Player: " + TimeSummaries[0] + "  hours, " + Math.Round(TimeSummaries[1]) + " minutes\n" +
-                "Second Player: " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + "  minutes\n" +
-                "Second player played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the First player" +
+                Console.Write($"{getFirstPlayerInfo.Login}: " + TimeSummaries[0] + "  hours, " + Math.Round(TimeSummaries[1]) + " minutes\n" +
+                getSecondPlayerInfo.Login + ": " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + "  minutes\n" +
+                getSecondPlayerInfo.Login + " played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the "+ getFirstPlayerInfo.Login +
                 "in " + time + " days");
             }
             else

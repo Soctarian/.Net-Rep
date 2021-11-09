@@ -91,9 +91,11 @@ namespace Controllers
             List<GetMatchDetails.Root> FirstListMatches = new List<GetMatchDetails.Root>();
             List<GetMatchDetails.Root> SecondListMatches = new List<GetMatchDetails.Root>();
             //0 - hours, 1 - minutes for First Player, 2 - hours, 3 - minutes for Second Player
-            double[] TimeSummaries = { 0, 0, 0, 0 };
+            double[] TimeSummaries = { 0, 0, 0, 0, 0, 0 };
             foreach (decimal ID in MatchIDs.Item1) FirstListMatches.Add(GetUrls.GetMatchDetailsUrl(ID));
             foreach (decimal ID in MatchIDs.Item2) SecondListMatches.Add(GetUrls.GetMatchDetailsUrl(ID));
+            TimeSummaries[4] = Convert.ToInt32(FirstPlayerID);
+            TimeSummaries[5] = Convert.ToInt32(SecondPlayerID);
             foreach (var match in FirstListMatches)
             {
                 /*Время приходит в секундах, при конвертации в минуты => 2254/60=37.56 получаем дробное значение, которое неправильно отображает время,
