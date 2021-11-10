@@ -48,10 +48,10 @@ namespace Controllers.Menu
                         Write("\nConfirm your password: ");
                         ConfirmPassword = ReadLine();
                         if (!PasswordEquality(Password, ConfirmPassword)) WriteLine("Password missmatch!\nPress any key");
-                        ReadKey(true);
 
                     } while (!PasswordEquality(Password, ConfirmPassword));
                     AddUser.RegisterUser(SteamID, Password);
+                    AddUser.AddMatchesForUserAsync(SteamID);
                     WriteLine("Succesfully registrated!");
                     RunLoginWindow();
                     break;
@@ -75,6 +75,7 @@ namespace Controllers.Menu
                             }
                         }
                     } while (!AddUser.CheckUser(SteamID, Password));
+                   
                     StartMenu(AddUser.GetUser(SteamID));
                     break;
                 case 2:

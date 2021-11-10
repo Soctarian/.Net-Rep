@@ -74,5 +74,29 @@ namespace UserClasses
             return user.Users.Find(SteamID);
         }
 
+        public static void AddMatchesForUser(long SteamID)
+        {
+            var deserializedData = GetUrls.GetMatchHistoryUrl(Deciphers.ConvertToSteamID32(Convert.ToDecimal(SteamID)));
+            List<decimal> IDs = new List<decimal>();
+            List<GetMatchDetails.Root> deserializedList = new List<GetMatchDetails.Root>();
+           
+            using (UserContext db = new UserContext())
+            {
+                foreach (var match in deserializedData.result.Matches)
+                {
+                    Matches session = new Matches
+                    {
+                        MatchID = Convert.ToInt64(match.MatchId),
+                        StartTime = match.start_time,
+                    };
+                    db.Matches.Add(session);
+                }
+                db.SaveChanges();
+            }
+        }
+        public static async void AddMatchesForUserAsync(long SteamID)
+        {
+            await Task.Run(() => AddMatchesForUser(SteamID));
+        }
     }
 }

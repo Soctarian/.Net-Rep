@@ -14,6 +14,7 @@ namespace UserClasses
         { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Matches> Matches { get; set; }
     }
 
     public class User
@@ -21,7 +22,6 @@ namespace UserClasses
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Index("UX_Steam_ID", IsUnique = true)]
         [Key]
-     // public int UniqID { get; set; }
         public long SteamID { get; set; }
         public int CommunityVisible { get; set; }
         public int CommentPermission { get; set; }
@@ -42,7 +42,7 @@ namespace UserClasses
     }
     public class Matches
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key]
         public long MatchID { get; set; }
         public decimal StartTime { get; set; }
