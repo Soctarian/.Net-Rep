@@ -51,7 +51,7 @@ namespace Controllers.Menu
 
                     } while (!PasswordEquality(Password, ConfirmPassword));
                     AddUser.RegisterUser(SteamID, Password);
-                    AddUser.AddMatchesForUserAsync(SteamID);
+                  //AddUser.AddMatchesForUserAsync(SteamID);
                     WriteLine("Succesfully registrated!");
                     RunLoginWindow();
                     break;

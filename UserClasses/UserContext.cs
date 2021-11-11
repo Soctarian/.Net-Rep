@@ -36,7 +36,7 @@ namespace UserClasses
         public string Password { get; set; }
 
         public string HashedPassword { get; set; }
-
+        public decimal LastTimeMatchesRefreshed { get; set; }
         public List<Matches> Matches { get; set; }
 
     }
@@ -44,8 +44,10 @@ namespace UserClasses
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key]
+        public long SteamID { get; set; }
         public long MatchID { get; set; }
-        public decimal StartTime { get; set; }
+        public decimal StartTime { get; set; }  
+
     }
 
 }

@@ -7,13 +7,13 @@ namespace UserClasses.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class anotherValidationChange : IMigrationMetadata
+    public sealed partial class changeV10 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(anotherValidationChange));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(changeV10));
         
         string IMigrationMetadata.Id
         {
-            get { return "202111052352162_anotherValidationChange"; }
+            get { return "202111101713597_changeV1.0"; }
         }
         
         string IMigrationMetadata.Source

@@ -1,25 +1,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using GetAPI_Response;
 
-namespace GetAPI_Response
-{
-    public class Program
+using IHost host = Host.CreateDefaultBuilder(args)
+    .UseWindowsService(options =>
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        options.ServiceName = "UpdateDBService";
+    })
+    .ConfigureServices(services =>
+    {
+        services.AddHostedService<Worker>();
+        services.AddHttpClient<CheckAndFillDBService>();
+    })
+    .Build();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-            .UseWindowsService()
-                .ConfigureServices((hostContext, services) =>
-                {
-                    services.AddHostedService<Worker>();
-                });
-    }
-}
+await host.RunAsync();
