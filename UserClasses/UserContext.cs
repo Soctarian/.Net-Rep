@@ -42,12 +42,18 @@ namespace UserClasses
     }
     public class Matches
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public long SteamID { get; set; }
-        public long MatchID { get; set; }
-        public decimal StartTime { get; set; }  
+        public int Id { get; set; }
 
+        public long User_SteamID { get; set; }
+        
+        public long MatchID { get; set; }
+        public decimal StartTime { get; set; }
+
+        [ForeignKey("User_SteamID")]
+        public User User { get; set; }
     }
 
 }
