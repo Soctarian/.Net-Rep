@@ -24,7 +24,6 @@ namespace GetAPI_Response
                 int matches = 0;
                 GetMatchHistory.Root deserializedData;
                 IEnumerable<GetMatchHistory.Match> deserializedMatchesList;
-                //List<GetMatchHistory.Match> deserializedMatchesList = new List<GetMatchHistory.Match>();
 
                 using (var db = new UserContext())
                 {
@@ -40,13 +39,14 @@ namespace GetAPI_Response
                             matches += deserializedData.result.Matches.Count();
                             UpdateNewUserDB(deserializedData, member.SteamID);
                         }
-                        else
+                        else 
                         {
                             var dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(member.LastTimeMatchesRefreshed));
-                            var lastCheckTimeV2 = dateTimeOffset.UtcDateTime;
+                            var lastCheckTimeV2 = dateTimeOffset.UtcDateTime.AddHours(2);
 
                             deserializedMatchesList = deserializedData.result.Matches
-                                .Where(match => Deciphers.UnixTimeStampToDateTime(match.start_time) < DateTime.Now && Deciphers.UnixTimeStampToDateTime(match.start_time) > lastCheckTimeV2);
+                                .Where(match => Deciphers.UnixTimeStampToDateTime(match.start_time) < DateTime.Now &&
+                                Deciphers.UnixTimeStampToDateTime(match.start_time) > lastCheckTimeV2);
 
 
                             member.LastTimeMatchesRefreshed = DateTimeOffset.Now.ToUnixTimeSeconds();

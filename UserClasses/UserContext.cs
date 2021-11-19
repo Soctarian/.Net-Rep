@@ -32,7 +32,7 @@ namespace UserClasses
         public string RealName { get; set; }
         public string ProfileName { get; set; }
 
-        [MaxLength(20), MinLength(6)]
+        [MaxLength(16), MinLength(6)]
         public string Password { get; set; }
 
         public string HashedPassword { get; set; }

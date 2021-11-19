@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>dotnet-GetAPI_Response-0D76BDC1-7C26-4147-8692-697D96C3BF22</UserSecretsId>
 	  <Nullable>enable</Nullable>
-	  <OutputType>exe</OutputType>
+	  <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
