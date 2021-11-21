@@ -6,20 +6,20 @@ using System.Text;
 
 namespace Controllers
 {
-    public class InputMatchInfo
+    public class OutputMatchInfo
     {
-        private decimal matchID;
-        public InputMatchInfo(IOutputHandler outputHandler)
+        private decimal SteamID;
+        public OutputMatchInfo(IOutputHandler outputHandler)
         {
             OutputHandler = outputHandler;
         }
-        public InputMatchInfo()
+        public OutputMatchInfo()
         {
 
         }
-        public InputMatchInfo(decimal matchID)
+        public OutputMatchInfo(long SteamID)
         {
-            this.matchID = matchID;
+            this.SteamID = SteamID;
         }
 
         private static double WinRate;
@@ -29,10 +29,11 @@ namespace Controllers
         public void InputQuickMatchStatistic(int countMatches, decimal accountId)
         {
             var deserializedData = GetUrls.GetMatchHistoryUrl(accountId, countMatches);
-            List<decimal> IDs = new List<decimal>();
+            var IDs = new List<decimal>();
             List<GetMatchDetails.Root> deserializedList = new List<GetMatchDetails.Root>();
             foreach (var match in deserializedData.result.Matches) IDs.Add(match.MatchId);
-            var HeroDictionary = HeroAndItemsDictionary.FillHeroDictionary();
+
+                var HeroDictionary = HeroAndItemsDictionary.FillHeroDictionary();
             string OutputResult = "";
             int WinCounts = 0;
             for (int i = 0; i < countMatches; i++)
@@ -45,12 +46,14 @@ namespace Controllers
                 switch (PlayerSlot["Team"])
                 {
                     case 0:
-                        OutputResult += "Radiant";
+
                         WinCounts += radiantWins ? 1 : 0;
+                        OutputResult += radiantWins ? "Radiant, Win" : "Radiant, Loose";
                         break;
                     case 1:
                         OutputResult += "Dire";
                         WinCounts += radiantWins ? 0 : 1;
+                        OutputResult += radiantWins ? "Dire, Loose" : "Dire, Win";
                         break;
                 }
                 OutputResult += $", Hero - {HeroDictionary[player.hero_id]}, KDA = {Math.Round(((player.kills + player.assists) / (double)player.deaths), 1)}, GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}";

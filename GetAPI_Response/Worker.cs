@@ -25,7 +25,7 @@ namespace GetAPI_Response
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 var infoDictionary = await _checkservice.CheckForNewMatches();
                 var logInfo = infoDictionary["Result"]=="Success"? $"Account updated: {infoDictionary["Update accounts count"]}\nMatches added: {infoDictionary["Added mathces count"]} \nUpdating done: {infoDictionary["Result"]}" : "Updating done: Failed";
-                Console.WriteLine(logInfo);
+                _logger.LogInformation(logInfo);
                 await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
         }

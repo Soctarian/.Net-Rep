@@ -115,7 +115,7 @@ namespace Controllers.Menu
 
         public void RunInputMatchStatistic(User user)
         {
-            InputMatchInfo inputMatchInfo = new InputMatchInfo();
+            OutputMatchInfo inputMatchInfo = new OutputMatchInfo();
             string promt = "Choose what kind of statistic you wanna get: ";
             string[] options = { "Quick match statistic", "Full match statistic", "Back to main menu", "Exit" };
             KeyboardMenu matchStatisticMenu = new KeyboardMenu(promt, options);
@@ -166,7 +166,7 @@ namespace Controllers.Menu
 
         public void RunStatisticForHeroInMatch(decimal matchID, User user)
         {
-            InputMatchInfo inputMatchInfo = new InputMatchInfo();
+            OutputMatchInfo inputMatchInfo = new OutputMatchInfo();
 
             Write("Input hero name: ");
             var hero = ReadLine();
@@ -197,7 +197,7 @@ namespace Controllers.Menu
                     Write("Enter the number of days which you want to compare time for: ");
                     var time = Convert.ToInt32(ReadLine());
                     PlayerComparison comaprison = new PlayerComparison(Deciphers.ConvertToSteamID32(user.SteamID), secondID, time);
-                    InputComparisonInfo.InputTimeComparison(comaprison.TimeComparison(), time);
+                    OutputComparisonInfo.InputTimeComparison(comaprison.TimeComparison(), time);
 
                     WriteLine("\nIf you want to back to the comparison menu, press any key");
                     ReadKey(true);
@@ -209,7 +209,7 @@ namespace Controllers.Menu
                     Write("Enter the number of days which you want to compare time for: ");
                     time = Convert.ToInt32(ReadLine());
                     comaprison = new PlayerComparison(Deciphers.ConvertToSteamID32(user.SteamID), secondID, time);
-                    InputComparisonInfo.InputWinrateComparison(comaprison.WinRateAndRankComparison(), time);
+                    OutputComparisonInfo.InputWinrateComparison(comaprison.WinRateAndRankComparison(), time);
 
                     WriteLine("\nIf you want to back to the comparison menu, press any key");
                     ReadKey(true);

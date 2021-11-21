@@ -7,7 +7,7 @@ using Controllers;
 
 namespace Controllers
 {
-    public class InputComparisonInfo
+    public class OutputComparisonInfo
     {
         static Dictionary<string, double> TimeOdd(double[] TimeSummaries)
         {

@@ -6,6 +6,7 @@ using System.Text;
 using DeserializeObjects;
 using Newtonsoft.Json;
 using UserClasses;
+using System.Linq;
 
 namespace Controllers
 {
@@ -43,6 +44,18 @@ namespace Controllers
                 UserSteamID32 = user.SteamID - 76561197960265728; 
                 
             }
+        }
+
+        public static List<decimal> GetPlayersMatches(decimal SteamID)
+        {
+            var matchesList = new List<decimal>();
+            using (var db = new UserContext())
+            {
+                var matches = db.Matches.Where(match => match.User_SteamID == SteamID);
+                foreach (var match in matches) matchesList.Add(match.MatchID);
+            
+            }
+            return matchesList;
         }
 
 

@@ -22,8 +22,7 @@ namespace Project
         //запити за розкладом WindowsService
         //список гравців зробити, замість дублювання 
         //асинхронно посилати запити await Task.WhenAll(list запросов)  
-        //style cop для красивого кода
-        //оновлення через TaskDeley
+       
         static void Main(string[] args)
         {
            // Console.Write("Input profile ID: ");
