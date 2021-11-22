@@ -7,11 +7,16 @@ using DeserializeObjects;
 using Newtonsoft.Json;
 using UserClasses;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Controllers
 {
+    
+
     public class GetUserInfo
     {
+
+        public List<GetMatchDetails.Root> DetailsList;
         public decimal UserSteamID32 { get; set; }
         public string Login { get; set; }
         public string Status { get; set; }
@@ -23,8 +28,8 @@ namespace Controllers
         public decimal LastLogOff { get; set; }
         public decimal TimeCreated { get; set; }
         public string RealName { get; set; }
-        
- 
+
+
         public void DeterminatePlayerInfo(decimal UserSteamID)
         {
             var DeserializedObject = GetUrls.GetUserString<GetPlayerSummaries.Root>(UserSteamID);
@@ -41,8 +46,8 @@ namespace Controllers
                 LastLogOff = user.LastLogOff;
                 TimeCreated = user.TimeCreated;
                 RealName = user.RealName;
-                UserSteamID32 = user.SteamID - 76561197960265728; 
-                
+                UserSteamID32 = user.SteamID - 76561197960265728;
+
             }
         }
 
@@ -53,11 +58,26 @@ namespace Controllers
             {
                 var matches = db.Matches.Where(match => match.User_SteamID == SteamID);
                 foreach (var match in matches) matchesList.Add(match.MatchID);
-            
+
             }
             return matchesList;
         }
 
+        public static List<GetMatchDetails.Root> GetDetailsList(decimal SteamID)
+        {
+            var detailsList = new List<GetMatchDetails.Root>();
+            var deserializedData = GetUrls.GetMatchHistoryUrl(Deciphers.ConvertToSteamID32(SteamID));
+            foreach(var match in deserializedData.result.Matches)
+            {
+                detailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId));
+            }
+
+            return detailsList;
+        }
+        public async void GetDetailsListAsync(decimal SteamID)
+        {
+             DetailsList = await Task.Run(() => GetDetailsList(SteamID));
+        }
 
     }
 }

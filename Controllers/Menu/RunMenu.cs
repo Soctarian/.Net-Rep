@@ -75,7 +75,8 @@ namespace Controllers.Menu
                             }
                         }
                     } while (!AddUser.CheckUser(SteamID, Password));
-                   
+                    var getuserinfo = new GetUserInfo();
+                    getuserinfo.GetDetailsListAsync(SteamID);
                     StartMenu(AddUser.GetUser(SteamID));
                     break;
                 case 2:
@@ -90,7 +91,7 @@ namespace Controllers.Menu
         public void RunMainMenu(User user)
         {
             string promt = $"{user.ProfileName}, welcome to my .Net project!";
-            string[] options = { "Input match statistic", "Add user to db", "Comparasive", "Exit" };
+            string[] options = { "Get match statistic", "Get statistic for hero", "Comparasive", "Exit" };
             KeyboardMenu mainMenu = new KeyboardMenu(promt, options);
             int SelectedIndex = mainMenu.Run();
             switch (SelectedIndex)

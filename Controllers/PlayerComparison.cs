@@ -48,6 +48,7 @@ namespace Controllers
           Сумировать победы и поражения этих игроков, найти винрейты и их разность. 
           Вывести результат для обоих игроков 
          */
+
         private decimal FirstPlayerID, SecondPlayerID;
         public (GetMatchHistory.Root,GetMatchHistory.Root) Players;
         public (List<decimal>, List<decimal>) MatchIDs;

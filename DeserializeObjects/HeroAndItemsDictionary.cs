@@ -9,6 +9,8 @@ namespace DeserializeObjects
 {
     public class HeroAndItemsDictionary
     {
+        public Dictionary<int, string> HeroDictionary = new Dictionary<int, string>();
+        public Dictionary<int, string> ItemDictionary = new Dictionary<int, string>();
 
         public class Item
         {
@@ -71,20 +73,18 @@ namespace DeserializeObjects
             return GetHeroString<Root>(url);
         }
 
-        public static Dictionary<int, string> FillHeroDictionary()
+        public void FillHeroDictionary()
         {
             var deserializedData = GetHeroData();
             Dictionary<int, string> Heroes = new Dictionary<int, string>();
-            foreach (var hero in deserializedData.result.heroes) Heroes.Add(hero.id, hero.localized_name);
-            return Heroes;
+            foreach (var hero in deserializedData.result.heroes) this.HeroDictionary.Add(hero.id, hero.localized_name);
         }
 
-        public static Dictionary<int, string> FillItemDictionary()
+        public void FillItemDictionary()
         {
             var deserializedData = GetItemData();
             Dictionary<int, string> Items = new Dictionary<int, string>();
-            foreach (var item in deserializedData.result.items) Items.Add(item.id, item.localized_name);
-            return Items;
+            foreach (var item in deserializedData.result.items) ItemDictionary.Add(item.id, item.localized_name);
         }
 
     }

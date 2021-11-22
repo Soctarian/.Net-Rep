@@ -23,6 +23,9 @@ namespace Project
         //список гравців зробити, замість дублювання 
         //асинхронно посилати запити await Task.WhenAll(list запросов)  
        
+        //Оптимизация async добавления списка деталей матча
+
+
         static void Main(string[] args)
         {
            // Console.Write("Input profile ID: ");
