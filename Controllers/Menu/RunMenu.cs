@@ -10,6 +10,7 @@ namespace Controllers.Menu
     {
 
         private decimal profileID32;
+        public GetUserInfo getuserinfo = new GetUserInfo();
         public RunMenu(decimal profileID32)
         {
             this.profileID32 = profileID32;
@@ -51,7 +52,6 @@ namespace Controllers.Menu
 
                     } while (!PasswordEquality(Password, ConfirmPassword));
                     AddUser.RegisterUser(SteamID, Password);
-                  //AddUser.AddMatchesForUserAsync(SteamID);
                     WriteLine("Succesfully registrated!");
                     RunLoginWindow();
                     break;
@@ -75,8 +75,7 @@ namespace Controllers.Menu
                             }
                         }
                     } while (!AddUser.CheckUser(SteamID, Password));
-                    var getuserinfo = new GetUserInfo();
-                    getuserinfo.GetDetailsListAsync(SteamID);
+                    this.getuserinfo.GetDetailsList(SteamID); 
                     StartMenu(AddUser.GetUser(SteamID));
                     break;
                 case 2:
@@ -100,7 +99,7 @@ namespace Controllers.Menu
                     RunInputMatchStatistic(user);
                     break;
                 case 1:
-                    RunAddUserToDB();
+                    GetHeroStats(user, this.getuserinfo);
                     break;
                 case 2:
                     RunComparasive(user);
@@ -112,6 +111,19 @@ namespace Controllers.Menu
                     break;
             }
 
+        }
+
+        private void GetHeroStats(User user, GetUserInfo getuserinfo)
+        {
+            GetHeroStats inputHeroStatsInfo = new GetHeroStats();
+
+            Write("Input hero name: ");
+            var hero = ReadLine();
+            inputHeroStatsInfo.GetHStats(user.SteamID, hero, getuserinfo);
+
+            WriteLine("If you want to back to the statistic menu, press any key");
+            ReadKey(true);
+            RunMainMenu(user);
         }
 
         public void RunInputMatchStatistic(User user)
@@ -179,10 +191,6 @@ namespace Controllers.Menu
 
         }
 
-        public void RunAddUserToDB()
-        {
-            
-        }
 
         public void RunComparasive(User user)
         {

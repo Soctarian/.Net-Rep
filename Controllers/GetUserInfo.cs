@@ -16,7 +16,7 @@ namespace Controllers
     public class GetUserInfo
     {
 
-        public List<GetMatchDetails.Root> DetailsList;
+        public List<GetMatchDetails.Root> DetailsList = new List<GetMatchDetails.Root>();
         public decimal UserSteamID32 { get; set; }
         public string Login { get; set; }
         public string Status { get; set; }
@@ -63,21 +63,21 @@ namespace Controllers
             return matchesList;
         }
 
-        public static List<GetMatchDetails.Root> GetDetailsList(decimal SteamID)
+        public void GetDetailsList(decimal SteamID)
         {
             var detailsList = new List<GetMatchDetails.Root>();
             var deserializedData = GetUrls.GetMatchHistoryUrl(Deciphers.ConvertToSteamID32(SteamID));
             foreach(var match in deserializedData.result.Matches)
             {
-                detailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId));
+                DetailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId));
             }
 
-            return detailsList;
+          //  return detailsList;
         }
-        public async void GetDetailsListAsync(decimal SteamID)
+  /*      public async void GetDetailsListAsync(decimal SteamID)
         {
              DetailsList = await Task.Run(() => GetDetailsList(SteamID));
-        }
+        }*/
 
     }
 }
