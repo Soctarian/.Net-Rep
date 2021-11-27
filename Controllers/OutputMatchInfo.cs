@@ -8,23 +8,52 @@ namespace Controllers
 {
     public class OutputMatchInfo
     {
-       
+
         private HeroAndItemsDictionary HeroesAndItemsDictionaries = new HeroAndItemsDictionary();
         public OutputMatchInfo()
         {
             this.HeroesAndItemsDictionaries.FillHeroDictionary();
             this.HeroesAndItemsDictionaries.FillItemDictionary();
         }
-  
+
         private static double WinRate;
 
-        public void InputQuickMatchStatistic(int countMatches, decimal accountId)
+
+        public Dictionary<string, string> QuickMatchStatisticResultString(Dictionary<string, int> PlayerSlot, bool radiantWins, GetMatchDetails.Player player)
+        {
+            var OutputResultD = new Dictionary<string, string>();
+            var OutputResult = "";
+            int WinCounts = 0;
+
+            switch (PlayerSlot["Team"])
+            {
+                case 0:
+
+                    WinCounts += radiantWins ? 1 : 0;
+                    OutputResult += radiantWins ? "Radiant, Win" : "Radiant, Loose";
+                    break;
+                case 1:
+                    OutputResult += "Dire";
+                    WinCounts += radiantWins ? 0 : 1;
+                    OutputResult += radiantWins ? "Dire, Loose" : "Dire, Win";
+                    break;
+            }
+            OutputResult += $", Hero - {this.HeroesAndItemsDictionaries.HeroDictionary[player.hero_id]}," +
+                $" KDA = {Math.Round(((player.kills + player.assists) / (double)player.deaths), 1)}," +
+                $" GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}";
+
+            OutputResultD.Add("InfoResult", OutputResult);
+            OutputResultD.Add("WinCount", Convert.ToString(WinCounts));
+
+            return OutputResultD;
+        }
+
+        public void OutputQuickMatchStatistic(int countMatches, decimal accountId)
         {
             var deserializedData = GetUrls.GetMatchHistoryUrl(accountId, countMatches);
             var IDs = new List<decimal>();
             List<GetMatchDetails.Root> deserializedList = new List<GetMatchDetails.Root>();
             foreach (var match in deserializedData.result.Matches) IDs.Add(match.MatchId);
-
             string OutputResult = "";
             int WinCounts = 0;
             for (int i = 0; i < countMatches; i++)
@@ -34,30 +63,18 @@ namespace Controllers
                 bool radiantWins = deserializedList[i].result.radiant_win;
                 GetMatchDetails.Player player = deserializedList[i].result.players.First(player => player.account_id == accountId);
                 var PlayerSlot = Deciphers.PlayerSlotDecipher(player.player_slot);
-                switch (PlayerSlot["Team"])
-                {
-                    case 0:
 
-                        WinCounts += radiantWins ? 1 : 0;
-                        OutputResult += radiantWins ? "Radiant, Win" : "Radiant, Loose";
-                        break;
-                    case 1:
-                        OutputResult += "Dire";
-                        WinCounts += radiantWins ? 0 : 1;
-                        OutputResult += radiantWins ? "Dire, Loose" : "Dire, Win";
-                        break;
-                }
-                OutputResult += $", Hero - {this.HeroesAndItemsDictionaries.HeroDictionary[player.hero_id]}, KDA = {Math.Round(((player.kills + player.assists) / (double)player.deaths), 1)}, GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}";
+                var result = QuickMatchStatisticResultString(PlayerSlot, radiantWins, player);
 
-
-                Console.WriteLine(OutputResult);
+                Console.WriteLine(OutputResult + result["InfoResult"]);
+                WinCounts += Convert.ToInt32(result["WinCount"]);
             }
             WinRate = Math.Round(((WinCounts / (double)countMatches) * 100), 5);
             Console.WriteLine($"Winrate for {countMatches} matches: {WinRate}%");
 
         }
 
-        public void InputFullkMatchStatistic(decimal MatchID)
+        public void OutputFullkMatchStatistic(decimal MatchID)
         {
             GetUserInfo user = new GetUserInfo();
 
@@ -79,7 +96,7 @@ namespace Controllers
             Console.Write(OutputResult);
         }
 
-        public void InputDetailMatchStatistic(string Hero, decimal matchID)
+        public void OutputDetailMatchStatistic(string Hero, decimal matchID)
         {
             string OutputResult = $"{Hero} stats:\n";
             var MatchObject = GetUrls.GetMatchDetailsUrl(matchID);

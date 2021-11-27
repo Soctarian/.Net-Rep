@@ -40,21 +40,13 @@ namespace Controllers
                 OutputResult= $"Match ID - {match.result.match_id}, Player team - ";
                 GameCount++;
                 var PlayerSlot = Deciphers.PlayerSlotDecipher(ResultWithHero.player_slot);
-                
-                switch (PlayerSlot["Team"])
-                {
-                    case 0:
 
-                        WinCounts += radiantWins ? 1 : 0;
-                        OutputResult += radiantWins ? "Radiant, Win" : "Radiant, Loose";
-                        break;
-                    case 1:
-                        WinCounts += radiantWins ? 0 : 1;
-                        OutputResult += radiantWins ? "Dire, Loose" : "Dire, Win";
-                        break;
-                }
-                OutputResult += $", KDA = {Math.Round(((ResultWithHero.kills + ResultWithHero.assists) / (double)ResultWithHero.deaths), 1)}, GPM - {ResultWithHero.gold_per_min}, EPM - {ResultWithHero.xp_per_min}, Hero damage - {ResultWithHero.hero_damage}";
-                Console.WriteLine(OutputResult);
+                var outputmatchinfo = new OutputMatchInfo();
+                var result = outputmatchinfo.QuickMatchStatisticResultString(PlayerSlot, radiantWins, ResultWithHero);
+
+                Console.WriteLine(OutputResult + result["InfoResult"]);
+                WinCounts += Convert.ToInt32(result["WinCount"]);
+
             }
             WinRate = Math.Round(WinCounts / (double)GameCount * 100, 5);
             Console.WriteLine($"Winrate for {GameCount} matches: {WinRate}%");

@@ -63,7 +63,28 @@ namespace Controllers
             return matchesList;
         }
 
-        public void GetDetailsList(decimal SteamID)
+        public async Task GetDetailsListFromDBAsync(decimal SteamID)
+        {
+            var tasks = new List<Task<GetMatchDetails.Root>>();
+            var detailsList = new List<GetMatchDetails.Root>();
+
+            using (var db = new UserContext())
+            {
+                var usersMatches = db.Matches.Where(userid => userid.User_SteamID == SteamID);
+                foreach(var match in usersMatches)
+                {
+                    tasks.Add(GetUrls.GetMatchDetailsUrlAsync(match.MatchID));
+                }
+            }
+            await Task.WhenAll(tasks);
+
+            foreach(var task in tasks)
+            {
+                DetailsList.Add(task.Result);
+            }
+        }
+
+   /*     public List<GetMatchDetails.Root> GetDetailsList(decimal SteamID)
         {
             var detailsList = new List<GetMatchDetails.Root>();
             var deserializedData = GetUrls.GetMatchHistoryUrl(Deciphers.ConvertToSteamID32(SteamID));
@@ -72,9 +93,9 @@ namespace Controllers
                 DetailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId));
             }
 
-          //  return detailsList;
+            return detailsList;
         }
-  /*      public async void GetDetailsListAsync(decimal SteamID)
+         public async Task GetDetailsListAsync(decimal SteamID)
         {
              DetailsList = await Task.Run(() => GetDetailsList(SteamID));
         }*/

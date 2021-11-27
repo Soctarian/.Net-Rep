@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DeserializeObjects
 {
@@ -49,6 +50,11 @@ namespace DeserializeObjects
             return GetWebResponseString<GetMatchDetails.Root>(url);
         }
 
+        public static async Task<GetMatchDetails.Root> GetMatchDetailsUrlAsync(decimal MatchId)
+        {
+            Uri url = new Uri($"https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001/?match_id={MatchId}&key=A80EC4AFFB0862E8476DFD2967292B79");
+            return GetWebResponseString<GetMatchDetails.Root>(url);
+        }
 
     }
 }

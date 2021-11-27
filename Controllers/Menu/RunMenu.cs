@@ -75,7 +75,8 @@ namespace Controllers.Menu
                             }
                         }
                     } while (!AddUser.CheckUser(SteamID, Password));
-                    this.getuserinfo.GetDetailsList(SteamID); 
+
+                    // var task = this.getuserinfo.GetDetailsListFromDBAsync(SteamID);
                     StartMenu(AddUser.GetUser(SteamID));
                     break;
                 case 2:
@@ -139,7 +140,7 @@ namespace Controllers.Menu
                 case 0:
                     Write("\nInput number of matches: ");
                     var countMathces = Convert.ToInt32(ReadLine());
-                    inputMatchInfo.InputQuickMatchStatistic(countMathces, Deciphers.ConvertToSteamID32(user.SteamID));
+                    inputMatchInfo.OutputQuickMatchStatistic(countMathces, Deciphers.ConvertToSteamID32(user.SteamID));
 
                     WriteLine("If you want to return to the match statistic menu, press any key");
                     ReadKey(true);
@@ -148,7 +149,7 @@ namespace Controllers.Menu
                 case 1:
                     Write("Input match ID: ");
                     var matchID = Convert.ToDecimal(ReadLine());
-                    inputMatchInfo.InputFullkMatchStatistic(matchID);
+                    inputMatchInfo.OutputFullkMatchStatistic(matchID);
 
                     WriteLine("Press y, if you want to get statistic for exact hero");
                     ConsoleKeyInfo keyInfo = ReadKey(true);
@@ -183,7 +184,7 @@ namespace Controllers.Menu
 
             Write("Input hero name: ");
             var hero = ReadLine();
-            inputMatchInfo.InputDetailMatchStatistic(hero, matchID);
+            inputMatchInfo.OutputDetailMatchStatistic(hero, matchID);
 
             WriteLine("If you want to back to the statistic menu, press any key");
             ReadKey(true);
