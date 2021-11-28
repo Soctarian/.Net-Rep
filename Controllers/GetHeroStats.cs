@@ -4,6 +4,7 @@ using System.Text;
 using Controllers;
 using System.Linq;
 using DeserializeObjects;
+using System.Threading.Tasks;
 
 namespace Controllers
 {
@@ -50,9 +51,24 @@ namespace Controllers
             }
             WinRate = Math.Round(WinCounts / (double)GameCount * 100, 5);
             Console.WriteLine($"Winrate for {GameCount} matches: {WinRate}%");
-
-            //  return statsInfo;
         }
+
+        public async Task<Dictionary<string, string>> GetAverageHeroResults(long SteamID, string heroName)
+        {
+            var Result = new Dictionary<string, string>();
+
+            var deserializedData = GetUrls.GetMatchHistoryUrl(Deciphers.ConvertToSteamID32(SteamID));
+            var IDs = new List<decimal>();
+            List<GetMatchDetails.Root> detailsList = new List<GetMatchDetails.Root>();
+            foreach (var match in deserializedData.result.Matches) 
+            {
+                detailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId));
+            }
+
+
+            return Result;
+        }
+
 
     }
 }

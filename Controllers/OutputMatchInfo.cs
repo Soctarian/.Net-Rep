@@ -54,7 +54,7 @@ namespace Controllers
             var IDs = new List<decimal>();
             List<GetMatchDetails.Root> deserializedList = new List<GetMatchDetails.Root>();
             foreach (var match in deserializedData.result.Matches) IDs.Add(match.MatchId);
-            string OutputResult = "";
+            string OutputResult;
             int WinCounts = 0;
             for (int i = 0; i < countMatches; i++)
             {

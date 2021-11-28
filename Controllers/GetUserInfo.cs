@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 
 namespace Controllers
 {
-    
-
     public class GetUserInfo
     {
 
@@ -51,18 +49,6 @@ namespace Controllers
             }
         }
 
-        public static List<decimal> GetPlayersMatches(decimal SteamID)
-        {
-            var matchesList = new List<decimal>();
-            using (var db = new UserContext())
-            {
-                var matches = db.Matches.Where(match => match.User_SteamID == SteamID);
-                foreach (var match in matches) matchesList.Add(match.MatchID);
-
-            }
-            return matchesList;
-        }
-
         public async Task GetDetailsListFromDBAsync(decimal SteamID)
         {
             var tasks = new List<Task<GetMatchDetails.Root>>();
@@ -70,7 +56,7 @@ namespace Controllers
 
             using (var db = new UserContext())
             {
-                var usersMatches = db.Matches.Where(userid => userid.User_SteamID == SteamID);
+                var usersMatches = db.Matches.AsNoTracking().Where(userid => userid.User_SteamID == SteamID);
                 foreach(var match in usersMatches)
                 {
                     tasks.Add(GetUrls.GetMatchDetailsUrlAsync(match.MatchID));
@@ -83,22 +69,6 @@ namespace Controllers
                 DetailsList.Add(task.Result);
             }
         }
-
-   /*     public List<GetMatchDetails.Root> GetDetailsList(decimal SteamID)
-        {
-            var detailsList = new List<GetMatchDetails.Root>();
-            var deserializedData = GetUrls.GetMatchHistoryUrl(Deciphers.ConvertToSteamID32(SteamID));
-            foreach(var match in deserializedData.result.Matches)
-            {
-                DetailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId));
-            }
-
-            return detailsList;
-        }
-         public async Task GetDetailsListAsync(decimal SteamID)
-        {
-             DetailsList = await Task.Run(() => GetDetailsList(SteamID));
-        }*/
 
     }
 }
