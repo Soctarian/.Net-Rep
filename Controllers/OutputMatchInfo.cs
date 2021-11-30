@@ -40,7 +40,7 @@ namespace Controllers
             }
             OutputResult += $", Hero - {this.HeroesAndItemsDictionaries.HeroDictionary[player.hero_id]}," +
                 $" KDA = {Math.Round(((player.kills + player.assists) / (double)player.deaths), 1)}," +
-                $" GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}";
+                $" GPM - {player.gold_per_min}, EPM - {player.xp_per_min}, Hero damage - {player.hero_damage}, NetWorth - {player.net_worth}";
 
             OutputResultD.Add("InfoResult", OutputResult);
             OutputResultD.Add("WinCount", Convert.ToString(WinCounts));
@@ -76,7 +76,7 @@ namespace Controllers
 
         public void OutputFullkMatchStatistic(decimal MatchID)
         {
-            GetUserInfo user = new GetUserInfo();
+            
 
             string OutputResult = "Radiant:\n";
             var MatchObject = GetUrls.GetMatchDetailsUrl(MatchID);
@@ -85,9 +85,9 @@ namespace Controllers
 
             foreach (var player in Players)
             {
-                var PlayerSteamID = player.account_id + 76561197960265728;
+                GetUserInfo user = new GetUserInfo(Deciphers.ConvertToSteamID64(player.account_id));
                 if (player.account_id == UInt32.MaxValue) user.Login = "Anonymous";
-                else user.DeterminatePlayerInfo(PlayerSteamID);
+                else user.DeterminatePlayerInfo();
 
                 if (iter == 5) OutputResult += "Dire:\n";
                 OutputResult += $"{user.Login,15}  -\t{this.HeroesAndItemsDictionaries.HeroDictionary[player.hero_id],10}\t{player.kills} / {player.deaths} / {player.assists}\t Net Worth : {player.net_worth}\n";
@@ -110,7 +110,7 @@ namespace Controllers
                             $"{this.HeroesAndItemsDictionaries.ItemDictionary[Player.item_4],5}\t|\t{this.HeroesAndItemsDictionaries.ItemDictionary[Player.item_5],5}\nItem neutral: " +
                             $"{this.HeroesAndItemsDictionaries.ItemDictionary[Player.item_neutral]}\n";
             OutputResult += Player.aghanims_scepter == 0 ? "Aghanim scepter - No  " : "Aghanim scepter - Yes  ";
-            OutputResult += Player.aghanims_shard == 0 ? "Aghanim shard - No  " : "Aghanim shard  - Yes";
+            OutputResult += Player.aghanims_shard == 0 ? "Aghanim shard - No  " : "Aghanim shard  - Yes\n";
             Console.Write(OutputResult);
         }
 

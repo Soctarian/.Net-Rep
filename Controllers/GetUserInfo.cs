@@ -15,6 +15,7 @@ namespace Controllers
     {
 
         public List<GetMatchDetails.Root> DetailsList = new List<GetMatchDetails.Root>();
+        public decimal UserSteamID64 { get; set; }
         public decimal UserSteamID32 { get; set; }
         public string Login { get; set; }
         public string Status { get; set; }
@@ -27,10 +28,15 @@ namespace Controllers
         public decimal TimeCreated { get; set; }
         public string RealName { get; set; }
 
-
-        public void DeterminatePlayerInfo(decimal UserSteamID)
+        public GetUserInfo(decimal SteamID)
         {
-            var DeserializedObject = GetUrls.GetUserString<GetPlayerSummaries.Root>(UserSteamID);
+            this.UserSteamID64 = SteamID;
+        }
+        public GetUserInfo() { }
+
+        public void DeterminatePlayerInfo()
+        {
+            var DeserializedObject = GetUrls.GetUserString<GetPlayerSummaries.Root>(this.UserSteamID64);
             var Player = DeserializedObject.response.Players;
             foreach (var user in Player)
             {
@@ -49,22 +55,21 @@ namespace Controllers
             }
         }
 
-        public async Task GetDetailsListFromDBAsync(decimal SteamID)
+        public async Task GetDetailsFromDBAndAddToListAsync(decimal SteamID)
         {
             var tasks = new List<Task<GetMatchDetails.Root>>();
             var detailsList = new List<GetMatchDetails.Root>();
-
+            IQueryable<Matches> userMatches = Enumerable.Empty<Matches>().AsQueryable();
             using (var db = new UserContext())
             {
-                var usersMatches = db.Matches.AsNoTracking().Where(userid => userid.User_SteamID == SteamID);
-                foreach(var match in usersMatches)
-                {
-                    tasks.Add(GetUrls.GetMatchDetailsUrlAsync(match.MatchID));
-                }
+                userMatches = db.Matches.AsNoTracking().Where(userid => userid.User_SteamID == SteamID);
+            }
+            foreach (var match in userMatches)
+            {
+                tasks.Add(GetUrls.GetMatchDetailsUrlAsync(match.MatchID));
             }
             await Task.WhenAll(tasks);
-
-            foreach(var task in tasks)
+            foreach (var task in tasks)
             {
                 DetailsList.Add(task.Result);
             }

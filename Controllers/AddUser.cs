@@ -13,8 +13,8 @@ namespace UserClasses
     {
         public static void AttachUser(long UserSteamID)
         {
-            GetUserInfo getinfo = new GetUserInfo();
-            getinfo.DeterminatePlayerInfo(UserSteamID);
+            GetUserInfo getinfo = new GetUserInfo(UserSteamID);
+            getinfo.DeterminatePlayerInfo();
 
             using (UserContext db = new UserContext())
             {
@@ -37,8 +37,8 @@ namespace UserClasses
 
         public static void RegisterUser(long UserSteamID, string Password)
         {
-                GetUserInfo getinfo = new GetUserInfo();
-                getinfo.DeterminatePlayerInfo(UserSteamID);
+                GetUserInfo getinfo = new GetUserInfo(UserSteamID);
+                getinfo.DeterminatePlayerInfo();
 
                 using (UserContext db = new UserContext())
                 {

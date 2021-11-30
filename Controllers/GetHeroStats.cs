@@ -53,18 +53,42 @@ namespace Controllers
             Console.WriteLine($"Winrate for {GameCount} matches: {WinRate}%");
         }
 
-        public async Task<Dictionary<string, string>> GetAverageHeroResults(long SteamID, string heroName)
+        public Dictionary<string, double> GetAverageHeroResults(decimal SteamID, string heroName)
         {
-            var Result = new Dictionary<string, string>();
-
+            var Result = new Dictionary<string, double>();
+            var WinCounter = 0;
             var deserializedData = GetUrls.GetMatchHistoryUrl(Deciphers.ConvertToSteamID32(SteamID));
             var IDs = new List<decimal>();
-            List<GetMatchDetails.Root> detailsList = new List<GetMatchDetails.Root>();
-            foreach (var match in deserializedData.result.Matches) 
+            var detailsList = new List<GetMatchDetails.Player>();
+            foreach (var match in deserializedData.result.Matches)
             {
-                detailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId));
+                detailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId).result.players.Find(
+                    player => player.account_id == Deciphers.ConvertToSteamID32(SteamID) && 
+                    this.HeroesAndItemsDictionaries.HeroDictionary[player.hero_id] == heroName));  
             }
 
+            var averageMatchDetailsArray = new double[detailsList.Count];
+           /* [0] - KDA
+            * [1] - GPM
+            * [2] - EPM
+            * [3] - HeroDamage
+            * [4] - NetWorth
+            */
+            foreach (var player in detailsList)
+            {
+                averageMatchDetailsArray[0] += (player.kills + player.assists) / (double)player.deaths;
+                averageMatchDetailsArray[1] += player.gold_per_min;
+                averageMatchDetailsArray[2] += player.xp_per_min;
+                averageMatchDetailsArray[3] += player.hero_damage;
+                averageMatchDetailsArray[4] += player.net_worth;
+            }
+            for (int i = 0; i < 5; i++) { averageMatchDetailsArray[i] /= (double)detailsList.Count; }
+
+            Result.Add("KDA", averageMatchDetailsArray[0]);
+            Result.Add("GPM", averageMatchDetailsArray[1]);
+            Result.Add("EPM", averageMatchDetailsArray[2]);
+            Result.Add("HeroDamage", averageMatchDetailsArray[3]);
+            Result.Add("NetWorth", averageMatchDetailsArray[4]);
 
             return Result;
         }

@@ -30,10 +30,10 @@ namespace Controllers
         }
         public static void InputTimeComparison(double[] TimeSummaries, int time)
         {
-            var getFirstPlayerInfo = new GetUserInfo();
-            getFirstPlayerInfo.DeterminatePlayerInfo(Deciphers.ConvertToSteamID64(Convert.ToDecimal(TimeSummaries[4])));
-            var getSecondPlayerInfo = new GetUserInfo();
-            getSecondPlayerInfo.DeterminatePlayerInfo(Deciphers.ConvertToSteamID64(Convert.ToDecimal(TimeSummaries[5])));
+            var getFirstPlayerInfo = new GetUserInfo(Deciphers.ConvertToSteamID64(Convert.ToDecimal(TimeSummaries[4])));
+            getFirstPlayerInfo.DeterminatePlayerInfo();
+            var getSecondPlayerInfo = new GetUserInfo(Deciphers.ConvertToSteamID64(Convert.ToDecimal(TimeSummaries[5])));
+            getSecondPlayerInfo.DeterminatePlayerInfo();
 
             var Distinction = TimeOdd(TimeSummaries);
             
@@ -42,14 +42,14 @@ namespace Controllers
                 Console.Write($"{getFirstPlayerInfo.Login}: " + TimeSummaries[0] + " hours,  " + Math.Round(TimeSummaries[1]) + " minutes\n" +
                  getSecondPlayerInfo.Login + ": " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + " minutes\n" +
                  getFirstPlayerInfo.Login + " played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the "+ getSecondPlayerInfo.Login +
-                "in " + time + " days");
+                " in " + time + " days");
             }
             else if (TimeSummaries[0] * 60 + TimeSummaries[1] < TimeSummaries[2] * 60 + TimeSummaries[3])
             {
                 Console.Write($"{getFirstPlayerInfo.Login}: " + TimeSummaries[0] + "  hours, " + Math.Round(TimeSummaries[1]) + " minutes\n" +
                 getSecondPlayerInfo.Login + ": " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + "  minutes\n" +
                 getSecondPlayerInfo.Login + " played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the "+ getFirstPlayerInfo.Login +
-                "in " + time + " days");
+                " in " + time + " days");
             }
             else
             {
@@ -59,6 +59,7 @@ namespace Controllers
 
         public static void InputWinrateComparison(Dictionary<string, int> Stats, int time)
         {
+            
             Console.WriteLine($"First player stats for " + time + " days: \n" +
                 "Count mathes: " + Stats["First player matches"] + "\n" +
                 "Wins: " + Stats["First player wins"] + "\n" +
@@ -72,6 +73,18 @@ namespace Controllers
 
         }
 
+        public static void OutputAverageHeroStatsInfo(decimal FirstSteamID, decimal SecondSteamID, string heroName)
+        {
+            var getherostats = new GetHeroStats();
+            var getfirstplayerinfo = new GetUserInfo(FirstSteamID);
+            getfirstplayerinfo.DeterminatePlayerInfo();
+            var getsecondplayerinfo = new GetUserInfo(SecondSteamID);
+            getsecondplayerinfo.DeterminatePlayerInfo();
+
+            var averageHeroStats = (FirstPlayer: getherostats.GetAverageHeroResults(FirstSteamID, heroName), Second: getherostats.GetAverageHeroResults(SecondSteamID, heroName));
+            Console.WriteLine($"\t\tAverage {heroName} stats:");
+
+        }
 
 
     }

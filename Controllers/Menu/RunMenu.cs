@@ -76,7 +76,7 @@ namespace Controllers.Menu
                         }
                     } while (!AddUser.CheckUser(SteamID, Password));
 
-                    var task = this.getuserinfo.GetDetailsListFromDBAsync(SteamID);
+                   // var task = this.getuserinfo.GetDetailsFromDBAndAddToListAsync(SteamID);
                     StartMenu(AddUser.GetUser(SteamID));
                     break;
                 case 2:
