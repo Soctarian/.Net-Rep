@@ -76,13 +76,20 @@ namespace Controllers
         public static void OutputAverageHeroStatsInfo(decimal FirstSteamID, decimal SecondSteamID, string heroName)
         {
             var getherostats = new GetHeroStats();
-            var getfirstplayerinfo = new GetUserInfo(FirstSteamID);
+            var getfirstplayerinfo = new GetUserInfo(Deciphers.ConvertToSteamID64(FirstSteamID));
             getfirstplayerinfo.DeterminatePlayerInfo();
-            var getsecondplayerinfo = new GetUserInfo(SecondSteamID);
+            var getsecondplayerinfo = new GetUserInfo(Deciphers.ConvertToSteamID64(SecondSteamID));
             getsecondplayerinfo.DeterminatePlayerInfo();
 
-            var averageHeroStats = (FirstPlayer: getherostats.GetAverageHeroResults(FirstSteamID, heroName), Second: getherostats.GetAverageHeroResults(SecondSteamID, heroName));
-            Console.WriteLine($"\t\tAverage {heroName} stats:");
+            var averageHeroStats = (FirstPlayer: getherostats.GetAverageHeroResults(FirstSteamID, heroName), SecondPlayer: getherostats.GetAverageHeroResults(SecondSteamID, heroName));
+            Console.WriteLine($"\t\tAverage {heroName} stats:\n" +
+                $"\t\t{getfirstplayerinfo.Login}\t\t{getsecondplayerinfo.Login}\n" +
+                $"KDA\t\t{averageHeroStats.FirstPlayer["KDA"]}\t\t{averageHeroStats.SecondPlayer["KDA"]}\n" +
+                $"GPM\t\t{averageHeroStats.FirstPlayer["GPM"]}\t\t{averageHeroStats.SecondPlayer["GPM"]}\n" +
+                $"EPM\t\t{averageHeroStats.FirstPlayer["EPM"]}\t\t{averageHeroStats.SecondPlayer["EPM"]}\n" +
+                $"Hero damage\t{averageHeroStats.FirstPlayer["HeroDamage"]}\t\t{averageHeroStats.SecondPlayer["HeroDamage"]}\n" +
+                $"NetWorth\t{averageHeroStats.FirstPlayer["NetWorth"]}\t\t{averageHeroStats.SecondPlayer["NetWorth"]}\n" +
+                $"Winrate\t\t{averageHeroStats.FirstPlayer["WinRate"]}\t\t{averageHeroStats.SecondPlayer["WinRate"]}\n");
 
         }
 

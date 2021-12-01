@@ -196,7 +196,7 @@ namespace Controllers.Menu
         public void RunComparasive(User user)
         {
             string promt = "Choose what kind of comparasive you wanna do";
-            string[] options = { "Time played comparasive", "Winrate comparasive", "Back to main menu", "Exit" };
+            string[] options = { "Time played comparasive", "Winrate comparasive", "Hero comparasive", "Back to main menu", "Exit" };
             KeyboardMenu сomparasiveMenu = new KeyboardMenu(promt, options);
             int selectedIndex = сomparasiveMenu.Run();
             switch (selectedIndex)
@@ -226,9 +226,16 @@ namespace Controllers.Menu
                     RunComparasive(user);
                     break;
                 case 2:
-                    RunMainMenu(user);
+                    Write("Enter the id of the player with whom you want to compare average hero stats: ");
+                    secondID = Convert.ToDecimal(ReadLine());
+                    Write("Enter hero name: ");
+                    var heroName = ReadLine();
+                    OutputComparisonInfo.OutputAverageHeroStatsInfo(Deciphers.ConvertToSteamID32(user.SteamID), secondID, heroName);
                     break;
                 case 3:
+                    RunMainMenu(user);
+                    break;
+                case 4:
                     Exit();
                     break;
                 default:

@@ -53,43 +53,63 @@ namespace Controllers
             Console.WriteLine($"Winrate for {GameCount} matches: {WinRate}%");
         }
 
-        public Dictionary<string, double> GetAverageHeroResults(decimal SteamID, string heroName)
+        public Dictionary<string, double> GetAverageHeroResults(decimal SteamID32, string heroName)
         {
             var Result = new Dictionary<string, double>();
             var WinCounter = 0;
-            var deserializedData = GetUrls.GetMatchHistoryUrl(Deciphers.ConvertToSteamID32(SteamID));
+            var deserializedData = GetUrls.GetMatchHistoryUrl(SteamID32);
             var IDs = new List<decimal>();
             var detailsList = new List<GetMatchDetails.Player>();
             foreach (var match in deserializedData.result.Matches)
             {
-                detailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId).result.players.Find(
-                    player => player.account_id == Deciphers.ConvertToSteamID32(SteamID) && 
-                    this.HeroesAndItemsDictionaries.HeroDictionary[player.hero_id] == heroName));  
+                 var details = GetUrls.GetMatchDetailsUrl(match.MatchId).result.players.Find(
+                    player => player.account_id == SteamID32 &&
+                    this.HeroesAndItemsDictionaries.HeroDictionary[player.hero_id] == heroName);
+               
+                if(details != null)
+                {
+                    detailsList.Add(details);
+                    var PlayerSlot = Deciphers.PlayerSlotDecipher(details.player_slot);
+                    bool radiantWins = GetUrls.GetMatchDetailsUrl(match.MatchId).result.radiant_win;
+                    switch (PlayerSlot["Team"])
+                    {
+                        case 0:
+
+                            WinCounter += radiantWins ? 1 : 0;
+                            break;
+                        case 1:
+                            WinCounter += radiantWins ? 0 : 1;
+                            break;
+                    }
+                }
             }
 
-            var averageMatchDetailsArray = new double[detailsList.Count];
-           /* [0] - KDA
-            * [1] - GPM
-            * [2] - EPM
-            * [3] - HeroDamage
-            * [4] - NetWorth
-            */
+            var averageMatchDetailsArray = new double[6];
+            for(int i = 0; i<6; i++) averageMatchDetailsArray[i] = 0;
+            /* [0] - KDA
+             * [1] - GPM
+             * [2] - EPM
+             * [3] - HeroDamage
+             * [4] - NetWorth
+             * [5] - WinRate
+             */
+            averageMatchDetailsArray[5] = WinCounter;
             foreach (var player in detailsList)
             {
-                averageMatchDetailsArray[0] += (player.kills + player.assists) / (double)player.deaths;
+                averageMatchDetailsArray[0] += player.deaths != 0 ? (player.kills + player.assists) / (double)player.deaths : (player.kills + player.assists);
                 averageMatchDetailsArray[1] += player.gold_per_min;
                 averageMatchDetailsArray[2] += player.xp_per_min;
                 averageMatchDetailsArray[3] += player.hero_damage;
                 averageMatchDetailsArray[4] += player.net_worth;
             }
-            for (int i = 0; i < 5; i++) { averageMatchDetailsArray[i] /= (double)detailsList.Count; }
+            for (int i = 0; i < 6; i++) { averageMatchDetailsArray[i] /= (double)detailsList.Count; }
 
-            Result.Add("KDA", averageMatchDetailsArray[0]);
-            Result.Add("GPM", averageMatchDetailsArray[1]);
-            Result.Add("EPM", averageMatchDetailsArray[2]);
-            Result.Add("HeroDamage", averageMatchDetailsArray[3]);
-            Result.Add("NetWorth", averageMatchDetailsArray[4]);
-
+            Result.Add("KDA", Math.Round(averageMatchDetailsArray[0],2));
+            Result.Add("GPM", Math.Round(averageMatchDetailsArray[1]));
+            Result.Add("EPM", Math.Round(averageMatchDetailsArray[2]));
+            Result.Add("HeroDamage", Math.Round(averageMatchDetailsArray[3]));
+            Result.Add("NetWorth", Math.Round(averageMatchDetailsArray[4]));
+            Result.Add("WinRate", Math.Round(averageMatchDetailsArray[5]*100));
             return Result;
         }
 

@@ -33,7 +33,6 @@ namespace Controllers
                     OutputResult += radiantWins ? "Radiant, Win" : "Radiant, Loose";
                     break;
                 case 1:
-                    OutputResult += "Dire";
                     WinCounts += radiantWins ? 0 : 1;
                     OutputResult += radiantWins ? "Dire, Loose" : "Dire, Win";
                     break;

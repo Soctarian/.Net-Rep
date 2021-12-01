@@ -16,7 +16,7 @@ using UserClasses;
 
 namespace Project
 {
-    //Test Account ID32: 268677900 898455820  Test SteamID: 76561198228943628, 76561198836531527 Test GameID: 6229091942 ...
+    //Test Account ID32: 268677900 898455820 203215979 187090659 Test SteamID: 76561198228943628, 76561198836531527 Test GameID: 6229091942 ...
     class Program
     {
         //запити за розкладом WindowsService
