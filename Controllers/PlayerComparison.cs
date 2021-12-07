@@ -23,15 +23,17 @@ namespace Controllers
         public static Dictionary<string, int> FillStats((int,int) CountMatches, (int, int) Wins)
         {
             var Stats = new Dictionary<string, int>();
-
+            
             Stats.Add("First player matches", CountMatches.Item1);
             Stats.Add("First player wins", Wins.Item1);
             Stats.Add("First player defeats", CountMatches.Item1-Wins.Item1);
             Stats.Add("First player winrate", (int)((double)Wins.Item1/CountMatches.Item1*100));
+            Stats.Add("First player MMR", Wins.Item1 * 30 - (CountMatches.Item1 - Wins.Item1) * 30);
             Stats.Add("Second player matches", CountMatches.Item2);
             Stats.Add("Second player wins", Wins.Item2);
             Stats.Add("Second player defeats", CountMatches.Item2 - Wins.Item2);
             Stats.Add("Second player winrate", (int)((double)Wins.Item2 / CountMatches.Item2 * 100));
+            Stats.Add("Second player MMR", Wins.Item2 * 30 - (CountMatches.Item2 - Wins.Item2) * 30);
             return Stats;
         }
 

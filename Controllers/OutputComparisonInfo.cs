@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UserClasses;
 using Controllers;
-
+using System.Threading.Tasks;
 
 namespace Controllers
 {
@@ -59,21 +59,23 @@ namespace Controllers
 
         public static void InputWinrateComparison(Dictionary<string, int> Stats, int time)
         {
-            
+
             Console.WriteLine($"First player stats for " + time + " days: \n" +
                 "Count mathes: " + Stats["First player matches"] + "\n" +
                 "Wins: " + Stats["First player wins"] + "\n" +
                 "Defeats: " + Stats["First player defeats"] + "\n" +
                 "Winrate: " + Stats["First player winrate"] + "%\n" +
+                "MMR: " + Stats["First player MMR"] + "\n" +
                 "Second player stats for " + time + " days: \n" +
                 "Count mathes: " + Stats["Second player matches"] + "\n" +
                 "Wins: " + Stats["Second player wins"] + "\n" +
                 "Defeats: " + Stats["Second player defeats"] + "\n" +
-                "Winrate: " + Stats["Second player winrate"] + "%\n");
+                "Winrate: " + Stats["Second player winrate"] + "%\n" +
+                "MMR: " + Stats["Second player MMR"] + "\n");
 
         }
 
-        public static void OutputAverageHeroStatsInfo(decimal FirstSteamID, decimal SecondSteamID, string heroName)
+        public async void OutputAverageHeroStatsInfo(decimal FirstSteamID, decimal SecondSteamID, string heroName)
         {
             var getherostats = new GetHeroStats();
             var getfirstplayerinfo = new GetUserInfo(Deciphers.ConvertToSteamID64(FirstSteamID));
@@ -81,7 +83,13 @@ namespace Controllers
             var getsecondplayerinfo = new GetUserInfo(Deciphers.ConvertToSteamID64(SecondSteamID));
             getsecondplayerinfo.DeterminatePlayerInfo();
 
-            var averageHeroStats = (FirstPlayer: getherostats.GetAverageHeroResults(FirstSteamID, heroName), SecondPlayer: getherostats.GetAverageHeroResults(SecondSteamID, heroName));
+        //  var averageHeroStats = (FirstPlayer: getherostats.GetAverageHeroResults(FirstSteamID, heroName), SecondPlayer: getherostats.GetAverageHeroResults(SecondSteamID, heroName));
+            var tasks = new List<Task<Dictionary<string, double>>>();
+            tasks.Add(getherostats.GetAverageHeroResultsAsync(FirstSteamID, heroName));
+            tasks.Add(getherostats.GetAverageHeroResultsAsync(SecondSteamID, heroName));
+            await Task.WhenAll(tasks);
+            var averageHeroStats = (FirstPlayer: tasks[0].Result, SecondPlayer: tasks[1].Result);
+          
             Console.WriteLine($"\t\tAverage {heroName} stats:\n" +
                 $"\t\t{getfirstplayerinfo.Login}\t\t{getsecondplayerinfo.Login}\n" +
                 $"KDA\t\t{averageHeroStats.FirstPlayer["KDA"]}\t\t{averageHeroStats.SecondPlayer["KDA"]}\n" +
@@ -89,7 +97,7 @@ namespace Controllers
                 $"EPM\t\t{averageHeroStats.FirstPlayer["EPM"]}\t\t{averageHeroStats.SecondPlayer["EPM"]}\n" +
                 $"Hero damage\t{averageHeroStats.FirstPlayer["HeroDamage"]}\t\t{averageHeroStats.SecondPlayer["HeroDamage"]}\n" +
                 $"NetWorth\t{averageHeroStats.FirstPlayer["NetWorth"]}\t\t{averageHeroStats.SecondPlayer["NetWorth"]}\n" +
-                $"Winrate\t\t{averageHeroStats.FirstPlayer["WinRate"]}\t\t{averageHeroStats.SecondPlayer["WinRate"]}\n");
+                $"Winrate\t\t{averageHeroStats.FirstPlayer["WinRate"]}%\t\t{averageHeroStats.SecondPlayer["WinRate"]}%\n");
 
         }
 

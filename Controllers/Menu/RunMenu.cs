@@ -76,7 +76,7 @@ namespace Controllers.Menu
                         }
                     } while (!AddUser.CheckUser(SteamID, Password));
 
-                   // var task = this.getuserinfo.GetDetailsFromDBAndAddToListAsync(SteamID);
+                    var task = this.getuserinfo.GetDetailsFromDBAndAddToListAsync(SteamID);
                     StartMenu(AddUser.GetUser(SteamID));
                     break;
                 case 2:
@@ -230,7 +230,8 @@ namespace Controllers.Menu
                     secondID = Convert.ToDecimal(ReadLine());
                     Write("Enter hero name: ");
                     var heroName = ReadLine();
-                    OutputComparisonInfo.OutputAverageHeroStatsInfo(Deciphers.ConvertToSteamID32(user.SteamID), secondID, heroName);
+                    var outputcomparison = new OutputComparisonInfo();
+                    outputcomparison.OutputAverageHeroStatsInfo(Deciphers.ConvertToSteamID32(user.SteamID), secondID, heroName);
                     break;
                 case 3:
                     RunMainMenu(user);
