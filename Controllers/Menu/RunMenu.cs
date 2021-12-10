@@ -59,14 +59,14 @@ namespace Controllers.Menu
                     RunLoginWindow();
                     break;
                 case 1:
-
+                    var login = "";
                     do {
                         Clear();
                         Write("\nInput your SteamID: ");
-                        SteamID = Convert.ToInt64(ReadLine());
+                        login = ReadLine();
                         Write("\nInput password: ");
                         Password = ReadLine();
-                        if(!AddUser.CheckUser(SteamID, Password))
+                        if(!AddUser.CheckUser(login, Password))
                         {
                             WriteLine("Your password is incorrect!");
                             WriteLine("Press R, if you want create an account or try again");
@@ -77,10 +77,10 @@ namespace Controllers.Menu
                                 RunLoginWindow();
                             }
                         }
-                    } while (!AddUser.CheckUser(SteamID, Password));
+                    } while (!AddUser.CheckUser(login, Password));
 
-                    getuserinfo.GetDetailsFromDB(SteamID);
-                    StartMenu(AddUser.GetUser(SteamID));
+                    getuserinfo.GetDetailsFromDB(AddUser.GetUserByLogin(login).SteamID);
+                    StartMenu(AddUser.GetUserByLogin(login));
                     break;
                 case 2:
                     Exit();
