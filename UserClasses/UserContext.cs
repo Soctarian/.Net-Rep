@@ -51,6 +51,7 @@ namespace UserClasses
         
         public long MatchID { get; set; }
         public decimal StartTime { get; set; }
+        public string DetailsData { get; set; }
 
         [ForeignKey("User_SteamID")]
         public User User { get; set; }

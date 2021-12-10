@@ -56,60 +56,20 @@ namespace Controllers
 
             }
         }
-
-       /* public static Task<Task<T>>[] Interleaved<T>(IEnumerable<Task<T>> tasks)
+        public void GetDetailsFromDB(decimal SteamID)
         {
-            var inputTasks = tasks.ToList();
-
-            var buckets = new TaskCompletionSource<Task<T>>[inputTasks.Count];
-            var results = new Task<Task<T>>[buckets.Length];
-            for (int i = 0; i < buckets.Length; i++)
-            {
-                buckets[i] = new TaskCompletionSource<Task<T>>();
-                results[i] = buckets[i].Task;
-            }
-
-            int nextTaskIndex = -1;
-            Action<Task<T>> continuation = completed =>
-            {
-                var bucket = buckets[Interlocked.Increment(ref nextTaskIndex)];
-                bucket.TrySetResult(completed);
-            };
-
-            foreach (var inputTask in inputTasks)
-                inputTask.ContinueWith(continuation, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
-
-            return results;
-        }*/
-
-        public async Task GetDetailsFromDBAndAddToListAsync(decimal SteamID)
-        {
-            var tasks = new List<Task<GetMatchDetails.Root>>();
             var detailsList = new List<GetMatchDetails.Root>();
             var userMatches = new List<Matches>();
             using (var db = new UserContext())
             {
                 userMatches = db.Matches.AsNoTracking().Where(userid => userid.User_SteamID == SteamID).ToList();
             }
-
-            foreach (var match in userMatches)
+            foreach(var match in userMatches)
             {
-                tasks.Add(GetUrls.GetMatchDetailsUrlAsync(match.MatchID));
+                DetailsList.Add(JsonConvert.DeserializeObject<GetMatchDetails.Root>(match.DetailsData));
             }
+        } 
 
-            // await Task.WhenAll(tasks);
-            while (tasks.Any())
-            {
-                var finishedtask = await Task.WhenAny(tasks);
-                tasks.Remove(finishedtask);
-                DetailsList.Add(finishedtask.Result);
-            }
-           
-            /* foreach (var task in tasks)
-             {
-                 DetailsList.Add(task.Result);
-             }*/
-        }
-
+    
     }
 }

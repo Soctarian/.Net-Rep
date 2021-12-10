@@ -24,10 +24,10 @@ namespace GetAPI_Response
                 int matches = 0;
                 GetMatchHistory.Root deserializedData;
                 IEnumerable<GetMatchHistory.Match> deserializedMatchesList;
-
+        
                 using (var db = new UserContext())
                 {
-
+                    
                     foreach (var member in db.Users)
                     {
                         deserializedData = GetUrls.GetMatchHistoryUrl(Deciphers.ConvertToSteamID32(Convert.ToDecimal(member.SteamID)));
@@ -84,6 +84,7 @@ namespace GetAPI_Response
                         User_SteamID = SteamID,
                         MatchID = Convert.ToInt64(match.MatchId),
                         StartTime = match.start_time,
+                        DetailsData = GetUrls.GetMatchDetailsString(match.MatchId),
                     };
                     db.Matches.Add(newMatch);
                 }
@@ -101,12 +102,12 @@ namespace GetAPI_Response
                         User_SteamID = SteamID,
                         MatchID = Convert.ToInt64(match.MatchId),
                         StartTime = match.start_time,
+                        DetailsData = GetUrls.GetMatchDetailsString(match.MatchId),
                     };
                     db.Matches.Add(newMatch);
                 }
                 db.SaveChanges();
             }
         }
-
     }
 }

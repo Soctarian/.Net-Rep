@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using UserClasses;
 using static System.Console;
 
@@ -24,8 +25,10 @@ namespace Controllers.Menu
 
         public void StartMenu(User user)
         {
-            RunMainMenu(user);
+          RunMainMenu(user);
         }
+
+
 
         public void RunLoginWindow()
         {
@@ -76,7 +79,7 @@ namespace Controllers.Menu
                         }
                     } while (!AddUser.CheckUser(SteamID, Password));
 
-                    var task = this.getuserinfo.GetDetailsFromDBAndAddToListAsync(SteamID);
+                    getuserinfo.GetDetailsFromDB(SteamID);
                     StartMenu(AddUser.GetUser(SteamID));
                     break;
                 case 2:
@@ -100,6 +103,34 @@ namespace Controllers.Menu
                     RunInputMatchStatistic(user);
                     break;
                 case 1:
+                    GetHeroStats(user, this.getuserinfo);
+                    break;
+                case 2:
+                    RunComparasive(user);
+                    break;
+                case 3:
+                    Exit();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public async Task RunMainMenu(User user, Task task)
+        {
+            string promt = $"{user.ProfileName}, welcome to my .Net project!";
+            string[] options = { "Get match statistic", "Get statistic for hero", "Comparasive", "Exit" };
+            KeyboardMenu mainMenu = new KeyboardMenu(promt, options);
+            int SelectedIndex = mainMenu.Run();
+            switch (SelectedIndex)
+            {
+                case 0:
+                    RunInputMatchStatistic(user);
+                    break;
+                case 1:
+                    var ms = task.IsCompleted == true ? "" : "Data is loading";
+                    Write(ms);
+                    await task;
                     GetHeroStats(user, this.getuserinfo);
                     break;
                 case 2:
