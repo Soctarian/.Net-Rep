@@ -11,7 +11,9 @@ namespace UserClasses
     {
         public UserContext()
           : base("Project")
-        { }
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<UserContext, UserClasses.Migrations.Configuration>());
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Matches> Matches { get; set; }

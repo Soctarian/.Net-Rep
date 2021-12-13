@@ -8,6 +8,10 @@ namespace Controllers
     public class PlayerComparison
     {
 
+        private decimal FirstPlayerID, SecondPlayerID;
+        public (GetMatchHistory.Root, GetMatchHistory.Root) Players;
+        public (List<decimal>, List<decimal>) MatchIDs;
+        public int time;
         public static List<decimal> GetMatchesArrayForTime(GetMatchHistory.Root Player, int time)
         {
             var matches = Player.result.Matches
@@ -20,41 +24,6 @@ namespace Controllers
             }
             return matchIDs;
         }
-        public static Dictionary<string, int> FillStats((int,int) CountMatches, (int, int) Wins)
-        {
-            var Stats = new Dictionary<string, int>();
-            
-            Stats.Add("First player matches", CountMatches.Item1);
-            Stats.Add("First player wins", Wins.Item1);
-            Stats.Add("First player defeats", CountMatches.Item1-Wins.Item1);
-            Stats.Add("First player winrate", (int)((double)Wins.Item1/CountMatches.Item1*100));
-            Stats.Add("First player MMR", Wins.Item1 * 30 - (CountMatches.Item1 - Wins.Item1) * 30);
-            Stats.Add("Second player matches", CountMatches.Item2);
-            Stats.Add("Second player wins", Wins.Item2);
-            Stats.Add("Second player defeats", CountMatches.Item2 - Wins.Item2);
-            Stats.Add("Second player winrate", (int)((double)Wins.Item2 / CountMatches.Item2 * 100));
-            Stats.Add("Second player MMR", Wins.Item2 * 30 - (CountMatches.Item2 - Wins.Item2) * 30);
-            return Stats;
-        }
-
-        /*Сравнение времени, проведенного в игре           План:
-          Спарсить все матчи
-          Отобрать айди тех, которые происходили за неделю\месяц\год\n-количество дней
-          Спарсить все детали этих матчей и суммировать продолжительности игр
-          Вывести время для 1 и 2 игра, провести необходимые сравнения
-          Сравнения процента побед за определенное время и в общем    
-        
-                                                           План:
-          Спарсить все матчи\Отобрать матчи за определенный промежуток времени
-          Спарсить все детали этих матчей, определить в них нужных игроков, определить победил ли игрок
-          Сумировать победы и поражения этих игроков, найти винрейты и их разность. 
-          Вывести результат для обоих игроков 
-         */
-
-        private decimal FirstPlayerID, SecondPlayerID;
-        public (GetMatchHistory.Root,GetMatchHistory.Root) Players;
-        public (List<decimal>, List<decimal>) MatchIDs;
-        public int time;
         public PlayerComparison(decimal FirstPlayerID, decimal SecondPlayerID, int time)
         {
             Players = (GetUrls.GetMatchHistoryUrl(FirstPlayerID), GetUrls.GetMatchHistoryUrl(SecondPlayerID));
@@ -63,7 +32,17 @@ namespace Controllers
             this.FirstPlayerID = FirstPlayerID;
             this.SecondPlayerID = SecondPlayerID;
         }
-        
+        public static Dictionary<string, int> FillStats(int CountMatches, int Wins)
+        {
+            var Stats = new Dictionary<string, int>();
+            Stats.Add("Player matches", CountMatches);
+            Stats.Add("Player wins", Wins);
+            Stats.Add("Player defeats", CountMatches-Wins);
+            Stats.Add("Payer winrate", (int)((double)Wins/CountMatches*100));
+            Stats.Add("Player MMR", Wins * 30 - (CountMatches - Wins) * 30);
+            return Stats;
+        }
+
         public Dictionary<string, int> WinRateAndRankComparison()
         {
             
@@ -86,7 +65,7 @@ namespace Controllers
                 Wins.Item2 += Deciphers.WinChecker(PlayerSlot, match.result.radiant_win);
             }
 
-            return FillStats(CountMatches, Wins);
+            return FillStats(0, 0);
         }
 
         public double[] TimeComparison()

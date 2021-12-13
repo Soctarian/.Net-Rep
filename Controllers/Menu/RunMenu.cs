@@ -62,7 +62,7 @@ namespace Controllers.Menu
                     var login = "";
                     do {
                         Clear();
-                        Write("\nInput your SteamID: ");
+                        Write("\nInput your Steam login: ");
                         login = ReadLine();
                         Write("\nInput password: ");
                         Password = ReadLine();
@@ -249,8 +249,8 @@ namespace Controllers.Menu
                     secondID = Convert.ToDecimal(ReadLine());
                     Write("Enter the number of days which you want to compare time for: ");
                     time = Convert.ToInt32(ReadLine());
-                    comaprison = new PlayerComparison(Deciphers.ConvertToSteamID32(user.SteamID), secondID, time);
-                    OutputComparisonInfo.InputWinrateComparison(comaprison.WinRateAndRankComparison(), time);
+                    
+                    OutputComparisonInfo.InputWinrateComparison(time, profileID32, secondID);
 
                     WriteLine("\nIf you want to back to the comparison menu, press any key");
                     ReadKey(true);

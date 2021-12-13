@@ -57,22 +57,33 @@ namespace Controllers
             }
         }
 
-        public static void InputWinrateComparison(Dictionary<string, int> Stats, int time)
+        public static void InputWinrateComparison(int time, decimal FirstSteamID, decimal SecondSteamID)
         {
+            var getfirstplayerinfo = new GetUserInfo(Deciphers.ConvertToSteamID64(FirstSteamID));
+            getfirstplayerinfo.DeterminatePlayerInfo();
+            var getsecondplayerinfo = new GetUserInfo(Deciphers.ConvertToSteamID64(SecondSteamID));
+            getsecondplayerinfo.DeterminatePlayerInfo();
 
-            Console.WriteLine($"First player stats for " + time + " days: \n" +
-                "Count mathes: " + Stats["First player matches"] + "\n" +
-                "Wins: " + Stats["First player wins"] + "\n" +
-                "Defeats: " + Stats["First player defeats"] + "\n" +
-                "Winrate: " + Stats["First player winrate"] + "%\n" +
-                "MMR: " + Stats["First player MMR"] + "\n" +
-                "Second player stats for " + time + " days: \n" +
-                "Count mathes: " + Stats["Second player matches"] + "\n" +
-                "Wins: " + Stats["Second player wins"] + "\n" +
-                "Defeats: " + Stats["Second player defeats"] + "\n" +
-                "Winrate: " + Stats["Second player winrate"] + "%\n" +
-                "MMR: " + Stats["Second player MMR"] + "\n");
+            var comaprisonForFirstPlayer = new PlayerComparison(FirstSteamID, SecondSteamID, time);
+            var Stats = comaprisonForFirstPlayer.WinRateAndRankComparison();
+            
 
+            var  OutputResult = $"{getfirstplayerinfo.Login} stats for " + time + " days: \n" +
+                "Count mathes: " + Stats["Player matches"] + "\n" +
+                "Wins: " + Stats["Player wins"] + "\n" +
+                "Defeats: " + Stats["Player defeats"] + "\n" +
+                "Winrate: " + Stats["Player winrate"] + "%\n" +
+                "MMR: " + Stats["Player MMR"] + "\n";
+
+
+            OutputResult += $"{getfirstplayerinfo.Login} stats for " + time + " days: \n" +
+                "Count mathes: " + Stats["Player matches"] + "\n" +
+                "Wins: " + Stats["Player wins"] + "\n" +
+                "Defeats: " + Stats["Player defeats"] + "\n" +
+                "Winrate: " + Stats["Player winrate"] + "%\n" +
+                "MMR: " + Stats["Player MMR"] + "\n";
+
+            Console.WriteLine(OutputResult);
         }
 
         public async void OutputAverageHeroStatsInfo(decimal FirstSteamID, decimal SecondSteamID, string heroName)
@@ -91,7 +102,7 @@ namespace Controllers
             var averageHeroStats = (FirstPlayer: tasks[0].Result, SecondPlayer: tasks[1].Result);
           
             Console.WriteLine($"\t\tAverage {heroName} stats:\n" +
-                $"\t\t{getfirstplayerinfo.Login}\t\t{getsecondplayerinfo.Login}\n" +
+                $"\t\t{getfirstplayerinfo.Login}\t{getsecondplayerinfo.Login}\n" +
                 $"KDA\t\t{averageHeroStats.FirstPlayer["KDA"]}\t\t{averageHeroStats.SecondPlayer["KDA"]}\n" +
                 $"GPM\t\t{averageHeroStats.FirstPlayer["GPM"]}\t\t{averageHeroStats.SecondPlayer["GPM"]}\n" +
                 $"EPM\t\t{averageHeroStats.FirstPlayer["EPM"]}\t\t{averageHeroStats.SecondPlayer["EPM"]}\n" +

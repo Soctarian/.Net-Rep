@@ -5,6 +5,8 @@ using Controllers;
 using System.Linq;
 using DeserializeObjects;
 using System.Threading.Tasks;
+using UserClasses;
+using Newtonsoft.Json;
 
 namespace Controllers
 {
@@ -18,7 +20,25 @@ namespace Controllers
             this.HeroesAndItemsDictionaries.FillItemDictionary();
         }
 
-        //Нужно сохранить данные о матче и данные о игроке в этом матче
+        private int CheckPlayerWin(GetMatchDetails.Player player, GetMatchDetails.Root match)
+        {
+            int win = 0;
+
+            var PlayerSlot = Deciphers.PlayerSlotDecipher(player.player_slot);
+            var radiantWins = match.result.radiant_win;
+            switch (PlayerSlot["Team"])
+            {
+                case 0:
+
+                    win = radiantWins ? 1 : 0;
+                    break;
+                case 1:
+                    win = radiantWins ? 0 : 1;
+                    break;
+            }
+
+            return win;
+        }
 
         public void GetHStats(long SteamID, string heroName, GetUserInfo getuserinfo)
         {
@@ -56,38 +76,50 @@ namespace Controllers
         public async Task<Dictionary<string, double>> GetAverageHeroResultsAsync(decimal SteamID32, string heroName)
         {
             var Result = new Dictionary<string, double>();
-
-            var detailsList = new List<GetMatchDetails.Player>();
+            var searchedPlayerDetailsList = new List<GetMatchDetails.Player>();
             var deserializedData = GetUrls.GetMatchHistoryUrl(SteamID32);
-            var tasks = new List<Task<GetMatchDetails.Root>>();
+            var matchDetailsList = new List<GetMatchDetails.Root>();
             int WinCounter = 0;
             bool radiantWins;
+            var UserMatches = new List<Matches>();
 
-            foreach(var match in deserializedData.result.Matches)
+          
+            if (GetUserInfo.IsUserDataInDB(Deciphers.ConvertToSteamID64(SteamID32)))
             {
-               tasks.Add(GetUrls.GetMatchDetailsUrlAsync(match.MatchId));
-            }
-            await Task.WhenAll(tasks);
-            foreach(var match in tasks)
-            {
-                var details = match.Result.result.players.Find(
+                using (var db = new UserContext())
+                {
+                    UserMatches = db.Matches.ToList().Where(user =>
+                    user.User_SteamID == Deciphers.ConvertToSteamID64(SteamID32)).ToList();
+                }
+                foreach (var match in UserMatches)
+                {
+                    var details = JsonConvert.DeserializeObject<GetMatchDetails.Root>(match.DetailsData).result.players.Find(
                      player => player.account_id == SteamID32 &&
                      this.HeroesAndItemsDictionaries.HeroDictionary[player.hero_id] == heroName);
 
-                if (details != null)
-                {
-                    detailsList.Add(details);
-                    var PlayerSlot = Deciphers.PlayerSlotDecipher(details.player_slot);
-                    radiantWins = match.Result.result.radiant_win;
-                    switch (PlayerSlot["Team"])
+                    if (details != null)
                     {
-                        case 0:
+                        searchedPlayerDetailsList.Add(details);
+                        WinCounter += CheckPlayerWin(details, JsonConvert.DeserializeObject<GetMatchDetails.Root>(match.DetailsData));
+                    }
+                }
+            }
+            else
+            {
+                foreach (var match in deserializedData.result.Matches)
+                {
+                    matchDetailsList.Add(GetUrls.GetMatchDetailsUrl(match.MatchId));
+                }
+                foreach (var match in matchDetailsList)
+                {
+                    var details = match.result.players.Find(
+                         player => player.account_id == SteamID32 &&
+                         this.HeroesAndItemsDictionaries.HeroDictionary[player.hero_id] == heroName);
 
-                            WinCounter += radiantWins ? 1 : 0;
-                            break;
-                        case 1:
-                            WinCounter += radiantWins ? 0 : 1;
-                            break;
+                    if (details != null)
+                    {
+                        searchedPlayerDetailsList.Add(details);
+                        WinCounter += CheckPlayerWin(details, match);
                     }
                 }
             }
@@ -102,7 +134,7 @@ namespace Controllers
              * [5] - WinRate
              */
             averageMatchDetailsArray[5] = WinCounter;
-            foreach (var player in detailsList)
+            foreach (var player in searchedPlayerDetailsList)
             {
                 averageMatchDetailsArray[0] += player.deaths != 0 ? (player.kills + player.assists) / (double)player.deaths : (player.kills + player.assists);
                 averageMatchDetailsArray[1] += player.gold_per_min;
@@ -110,7 +142,7 @@ namespace Controllers
                 averageMatchDetailsArray[3] += player.hero_damage;
                 averageMatchDetailsArray[4] += player.net_worth;
             }
-            for (int i = 0; i < 6; i++) { averageMatchDetailsArray[i] /= (double)detailsList.Count; }
+            for (int i = 0; i < 6; i++) { averageMatchDetailsArray[i] /= (double)searchedPlayerDetailsList.Count; }
 
             Result.Add("KDA", Math.Round(averageMatchDetailsArray[0], 2));
             Result.Add("GPM", Math.Round(averageMatchDetailsArray[1]));

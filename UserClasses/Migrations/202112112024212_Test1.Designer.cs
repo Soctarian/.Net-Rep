@@ -7,13 +7,13 @@ namespace UserClasses.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class AddOneToManyRef : IMigrationMetadata
+    public sealed partial class Test1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddOneToManyRef));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Test1));
         
         string IMigrationMetadata.Id
         {
-            get { return "202111032323136_AddOneToManyRef"; }
+            get { return "202112112024212_Test1"; }
         }
         
         string IMigrationMetadata.Source
