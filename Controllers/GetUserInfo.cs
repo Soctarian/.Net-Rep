@@ -72,8 +72,8 @@ namespace Controllers
 
         public static bool IsUserDataInDB(decimal SteamID)
         {
-            var user = new User();
-           using(var db = new UserContext())
+           var user = new User();
+            using (var db = new UserContext())
            {
                 user = db.Users.AsNoTracking().First(user => user.SteamID == SteamID);
            }

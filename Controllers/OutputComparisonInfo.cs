@@ -9,46 +9,50 @@ namespace Controllers
 {
     public class OutputComparisonInfo
     {
-        static Dictionary<string, double> TimeOdd(double[] TimeSummaries)
+        static Dictionary<string, double> TimeOdd(double[] TimeSummariesFirst, double[] TimeSummariesSecond)
         {
             double distinction;
             Dictionary<string, double> timeOdd = new Dictionary<string, double>();
-            if (TimeSummaries[0] * 60 + TimeSummaries[1] > TimeSummaries[2] * 60 + TimeSummaries[3]) distinction = (Math.Round(TimeSummaries[0]) + Math.Round(TimeSummaries[1]) / 100.0) - (Math.Round(TimeSummaries[2]) + Math.Round(TimeSummaries[3]) / 100.0);
-            else distinction = (Math.Round(TimeSummaries[2]) + Math.Round(TimeSummaries[3]) / 100.0) - (Math.Round(TimeSummaries[0]) + Math.Round(TimeSummaries[1]) / 100.0);
+            if (TimeSummariesFirst[0] * 60 + TimeSummariesFirst[1] > TimeSummariesSecond[0] * 60 + TimeSummariesSecond[1]) distinction = (Math.Round(TimeSummariesFirst[0]) + Math.Round(TimeSummariesFirst[1]) / 100.0) - (Math.Round(TimeSummariesSecond[0]) + Math.Round(TimeSummariesSecond[1]) / 100.0);
+            else distinction = (Math.Round(TimeSummariesSecond[0]) + Math.Round(TimeSummariesSecond[1]) / 100.0) - (Math.Round(TimeSummariesFirst[0]) + Math.Round(TimeSummariesFirst[1]) / 100.0);
 
-            if(Math.Round((distinction - Math.Floor(distinction)) * 100 - 40)>0)
+            if (Math.Round((distinction - Math.Floor(distinction)) * 100 - 40) > 0)
             {
                 timeOdd.Add("hours", Math.Round(Math.Floor(distinction)));
                 timeOdd.Add("minutes", Math.Round((distinction - Math.Floor(distinction)) * 100 - 40));
             }
             else
             {
-                timeOdd.Add("hours", Math.Round(Math.Floor(distinction))-1);
+                timeOdd.Add("hours", Math.Round(Math.Floor(distinction)) - 1);
                 timeOdd.Add("minutes", Math.Round((distinction - Math.Floor(distinction)) * 100 + 20));
             }
             return timeOdd;
         }
-        public static void InputTimeComparison(double[] TimeSummaries, int time)
+
+        public static void InputTimeComparison(PlayerComparison comparison, int time)
         {
-            var getFirstPlayerInfo = new GetUserInfo(Deciphers.ConvertToSteamID64(Convert.ToDecimal(TimeSummaries[4])));
+            var TimeSummariesFirst = comparison.TimeComparison(comparison.FirstPlayerID);
+            var TimeSummariesSecond = comparison.TimeComparison(comparison.SecondPlayerID);
+
+            var getFirstPlayerInfo = new GetUserInfo(Deciphers.ConvertToSteamID64((int)TimeSummariesFirst[2]));
             getFirstPlayerInfo.DeterminatePlayerInfo();
-            var getSecondPlayerInfo = new GetUserInfo(Deciphers.ConvertToSteamID64(Convert.ToDecimal(TimeSummaries[5])));
+            var getSecondPlayerInfo = new GetUserInfo(Deciphers.ConvertToSteamID64((int)TimeSummariesSecond[2]));
             getSecondPlayerInfo.DeterminatePlayerInfo();
 
-            var Distinction = TimeOdd(TimeSummaries);
-            
-            if (TimeSummaries[0] * 60 + TimeSummaries[1] > TimeSummaries[2] * 60 + TimeSummaries[3])
+            var Distinction = TimeOdd(TimeSummariesFirst, TimeSummariesSecond);
+
+            if (TimeSummariesFirst[0] * 60 + TimeSummariesFirst[1] > TimeSummariesSecond[0] * 60 + TimeSummariesSecond[1])
             {
-                Console.Write($"{getFirstPlayerInfo.Login}: " + TimeSummaries[0] + " hours,  " + Math.Round(TimeSummaries[1]) + " minutes\n" +
-                 getSecondPlayerInfo.Login + ": " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + " minutes\n" +
-                 getFirstPlayerInfo.Login + " played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the "+ getSecondPlayerInfo.Login +
+                Console.WriteLine($"{getFirstPlayerInfo.Login}: " + TimeSummariesFirst[0] + " hours,  " + Math.Round(TimeSummariesFirst[1]) + " minutes\n" +
+                 getSecondPlayerInfo.Login + ": " + TimeSummariesSecond[0] + " hours, " + Math.Round(TimeSummariesSecond[1]) + " minutes\n" +
+                 getFirstPlayerInfo.Login + " played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the " + getSecondPlayerInfo.Login +
                 " in " + time + " days");
             }
-            else if (TimeSummaries[0] * 60 + TimeSummaries[1] < TimeSummaries[2] * 60 + TimeSummaries[3])
+            else if (TimeSummariesFirst[0] * 60 + TimeSummariesFirst[1] < TimeSummariesSecond[0] * 60 + TimeSummariesSecond[1])
             {
-                Console.Write($"{getFirstPlayerInfo.Login}: " + TimeSummaries[0] + "  hours, " + Math.Round(TimeSummaries[1]) + " minutes\n" +
-                getSecondPlayerInfo.Login + ": " + TimeSummaries[2] + " hours, " + Math.Round(TimeSummaries[3]) + "  minutes\n" +
-                getSecondPlayerInfo.Login + " played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the "+ getFirstPlayerInfo.Login +
+                Console.Write($"{getFirstPlayerInfo.Login}: " + TimeSummariesFirst[0] + "  hours, " + Math.Round(TimeSummariesFirst[1]) + " minutes\n" +
+                getSecondPlayerInfo.Login + ": " + TimeSummariesSecond[0] + " hours, " + Math.Round(TimeSummariesSecond[1]) + "  minutes\n" +
+                getSecondPlayerInfo.Login + " played " + Distinction["hours"] + " hours and " + Distinction["minutes"] + " minutes more, then the " + getFirstPlayerInfo.Login +
                 " in " + time + " days");
             }
             else
@@ -64,8 +68,8 @@ namespace Controllers
             var getsecondplayerinfo = new GetUserInfo(Deciphers.ConvertToSteamID64(SecondSteamID));
             getsecondplayerinfo.DeterminatePlayerInfo();
 
-            var comaprisonForFirstPlayer = new PlayerComparison(FirstSteamID, SecondSteamID, time);
-            var Stats = comaprisonForFirstPlayer.WinRateAndRankComparison();
+            var comaprison = new PlayerComparison(FirstSteamID, SecondSteamID, time);
+            var Stats = comaprison.WinRateAndRankComparison(comaprison.FirstPlayerID);
             
 
             var  OutputResult = $"{getfirstplayerinfo.Login} stats for " + time + " days: \n" +
@@ -75,8 +79,8 @@ namespace Controllers
                 "Winrate: " + Stats["Player winrate"] + "%\n" +
                 "MMR: " + Stats["Player MMR"] + "\n";
 
-
-            OutputResult += $"{getfirstplayerinfo.Login} stats for " + time + " days: \n" +
+            Stats = comaprison.WinRateAndRankComparison(comaprison.SecondPlayerID);
+            OutputResult += $"{getsecondplayerinfo.Login} stats for " + time + " days: \n" +
                 "Count mathes: " + Stats["Player matches"] + "\n" +
                 "Wins: " + Stats["Player wins"] + "\n" +
                 "Defeats: " + Stats["Player defeats"] + "\n" +

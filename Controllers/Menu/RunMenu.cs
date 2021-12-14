@@ -237,8 +237,8 @@ namespace Controllers.Menu
                     var secondID = Convert.ToDecimal(ReadLine());
                     Write("Enter the number of days which you want to compare time for: ");
                     var time = Convert.ToInt32(ReadLine());
-                    PlayerComparison comaprison = new PlayerComparison(Deciphers.ConvertToSteamID32(user.SteamID), secondID, time);
-                    OutputComparisonInfo.InputTimeComparison(comaprison.TimeComparison(), time);
+                    PlayerComparison comparison = new PlayerComparison(Deciphers.ConvertToSteamID32(user.SteamID), secondID, time);
+                    OutputComparisonInfo.InputTimeComparison(comparison, time);
 
                     WriteLine("\nIf you want to back to the comparison menu, press any key");
                     ReadKey(true);
@@ -250,7 +250,7 @@ namespace Controllers.Menu
                     Write("Enter the number of days which you want to compare time for: ");
                     time = Convert.ToInt32(ReadLine());
                     
-                    OutputComparisonInfo.InputWinrateComparison(time, profileID32, secondID);
+                    OutputComparisonInfo.InputWinrateComparison(time, Deciphers.ConvertToSteamID32(user.SteamID), secondID);
 
                     WriteLine("\nIf you want to back to the comparison menu, press any key");
                     ReadKey(true);
